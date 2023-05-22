@@ -122,7 +122,7 @@ try {
           Array.from(
             { length: (Math.random() * 10) | 0 },
             () => UHOS[Math.floor(Math.random() * UHOS.length)]
-          ).join("")
+          ).join("") || "・・・。"
         );
       }
     }
