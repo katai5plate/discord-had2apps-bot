@@ -28,8 +28,17 @@ const MUR_REGEX =
   /.+(かな[ぁあ]?|かね[ぇえ]?|かよ[ぉお]?|すか|すね[ぇえ]?|だな[ぁあ]?|だね[ぇえ]?|だよ[ぉおねぇえ]?|やね[ぇえ]?|やな[ぁあ]?|よな[ぁあ]?|よね[ぇえ]?|るか[ぁあ]?|るな[ぁあ]?)([。！？ｗ・,…‥～ー])?$/u;
 const HMM_REGEX =
   /^(うーん|あれ[ー～？]?|あら(ま[ぁあ]?)?|あれまぁ?|変だな|おかしいな|なんか(変|おかしいな?))$/;
-const UHO_REGEX = /^[ウホッうほっー～・！？。、…\n]+$/;
-const UHO_BASIC = ["ウホ", "ウホホ", "ウッホ", "ウホッ", "ウホウ", "ホッ"];
+const UHO_REGEX = /^[ウゥホッォオー～・！？。、…\n]+$/;
+const UHO_BASIC = [
+  "ウホ",
+  "ウホホ",
+  "ウッホ",
+  "ウホッ",
+  "ウホウ",
+  "ホッ",
+  "ウッホォ",
+  "ウオゥ",
+];
 const UHOS = [
   ...UHO_BASIC,
   ...UHO_BASIC.map((x) => `${x}！`),
@@ -116,7 +125,7 @@ try {
         `うほっ、いい<@${message.author.id}>・・・`,
       ]);
       // ゴリラ語
-      if (["ウホッ", "うほっ"].includes(message.content)) {
+      if (message.content === "ウホッ") {
         await reply(`いい<@${message.author.id}>・・・`);
       } else if (UHO_REGEX.test(message.content)) {
         await reply(
