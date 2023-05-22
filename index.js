@@ -50,7 +50,7 @@ try {
     console.log({ message });
     // メンション時のメッセージ
     if (message.mentions.has(client.user)) {
-      await message.reply("うんち");
+      // await message.reply("うんち");
     }
     // 返信しないリストに入っていないユーザーの発言
     if (!NO_REPLY_USERS_ID.includes(message.author.id)) {
