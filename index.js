@@ -28,6 +28,13 @@ const MUR_REGEX =
   /.+(かな[ぁあ]?|かね[ぇえ]?|かよ[ぉお]?|すか|すね[ぇえ]?|だな[ぁあ]?|だね[ぇえ]?|だよ[ぉおねぇえ]?|やね[ぇえ]?|やな[ぁあ]?|よな[ぁあ]?|よね[ぇえ]?|るか[ぁあ]?|るな[ぁあ]?)([。！？ｗ・,…‥～ー])?$/u;
 const HMM_REGEX =
   /^(うーん|あれ[ー～？]?|あら(ま[ぁあ]?)?|あれまぁ?|変だな|おかしいな|なんか(変|おかしいな?))$/;
+const UHO_REGEX = /^[ウホッうほっー～・！？。、…\n]+$/;
+const UHO_BASIC = ["ウホ", "ウホホ", "ウッホ", "ウホッ", "ウホウ", "ホッ"];
+const UHOS = [
+  ...UHO_BASIC,
+  ...UHO_BASIC.map((x) => `${x}！`),
+  ...UHO_BASIC.map((x) => `${x}？`),
+];
 
 const shuffleWord = (arr) => {
   let cumulativeWeight = 0;
@@ -102,6 +109,22 @@ try {
         "ギャルのパンティおくれ！",
       ]);
       instantPost("レターパックで現金送れ", ["はすべて詐欺です"]);
+      instantPost("やらないか", [
+        "アッー！",
+        "アッーーー！",
+        `うほっ、いい<@${message.author.id}>・・・`,
+      ]);
+      // ゴリラ語
+      if (["ウホッ", "うほっ"].includes(message.content)) {
+        await message.reply(`いい<@${message.author.id}>・・・`);
+      } else if (UHO_REGEX.test(message.content)) {
+        await message.reply(
+          Array.from(
+            { length: (Math.random() * 10) | 0 },
+            () => UHOS[Math.floor(Math.random() * UHOS.length)]
+          ).join("")
+        );
+      }
     }
     // プレフィックスコマンド
     if (message.content.startsWith(PREFIX)) {
