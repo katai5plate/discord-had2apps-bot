@@ -29,7 +29,16 @@ const MUR_REGEX =
 const HMM_REGEX =
   /^(うーん|あれ[ー～？]?|あら(ま[ぁあ]?)?|あれまぁ?|変だな|おかしいな|なんか(変|おかしいな?))$/;
 
-const shuffleWord = (arr) => arr.at((Math.random() * arr.length) | 0);
+const shuffleWord = (arr) => {
+  let cumulativeWeight = 0;
+  return arr.find((_, i) => {
+    cumulativeWeight += 1 / Math.pow(2, i);
+    return (
+      Math.random() * arr.reduce((acc, _, i) => acc + 1 / Math.pow(2, i), 0) <=
+      cumulativeWeight
+    );
+  });
+};
 
 try {
   app.get("/", (req, res) => {
@@ -46,11 +55,15 @@ try {
   });
 
   client.on("messageCreate", async (message) => {
+    const instantPost = async (mes, replies) =>
+      message.content === mes && (await message.reply(shuffleWord(replies)));
+
     if (message.author.id == client.user.id || message.author.bot) return;
     console.log({ message });
     // メンション時のメッセージ
     if (message.mentions.has(client.user)) {
-      // await message.reply("うんち");
+      if (/魔王$/.test(message.content))
+        await message.reply(shuffleWord(["把握"]));
     }
     // 返信しないリストに入っていないユーザーの発言
     if (!NO_REPLY_USERS_ID.includes(message.author.id)) {
@@ -64,16 +77,21 @@ try {
           shuffleWord([
             "どうした？",
             "どしたん？",
+            "どした？",
             "話きこか？",
             "なんかあった？",
             "ほう？",
           ])
         );
       }
-      // ほう
-      if (message.content === "ほう") {
-        await message.reply(shuffleWord(["ほう"]));
-      }
+      // 単発系
+      instantPost("ほう", ["ほう"]);
+      instantPost("ふむ", ["ふむ"]);
+      instantPost("おぱんつ", [
+        "大好き丸だぁ・・・",
+        "ギャルのパンティおくれ！",
+      ]);
+      instantPost("レターパックで現金送れ", ["はすべて詐欺です"]);
     }
     // プレフィックスコマンド
     if (message.content.startsWith(PREFIX)) {
