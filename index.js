@@ -35,6 +35,7 @@ const UHOS = [
   ...UHO_BASIC.map((x) => `${x}！`),
   ...UHO_BASIC.map((x) => `${x}？`),
 ];
+const NO_COMMENT = "・・・。";
 
 const shuffleWord = (arr) => {
   let cumulativeWeight = 0;
@@ -62,20 +63,20 @@ try {
   });
 
   client.on("messageCreate", async (message) => {
+    const reply = async (mes) => message.reply(mes || NO_COMMENT);
     const instantPost = async (mes, replies) =>
-      message.content === mes && (await message.reply(shuffleWord(replies)));
+      message.content === mes && (await reply(shuffleWord(replies)));
 
     if (message.author.id == client.user.id || message.author.bot) return;
     // メンション時のメッセージ
     if (message.mentions.has(client.user)) {
-      if (/魔王$/.test(message.content))
-        await message.reply(shuffleWord(["把握"]));
+      if (/魔王$/.test(message.content)) await reply(shuffleWord(["把握"]));
     }
     // 返信しないリストに入っていないユーザーの発言
     if (!NO_REPLY_USERS_ID.includes(message.author.id)) {
       // 便乗
       if (MUR_REGEX.test(message.content.split(/\n/g).at(-1))) {
-        await message.reply(
+        await reply(
           shuffleWord([
             "そうだよ（便乗）",
             "そうだよ（便乗）",
@@ -89,7 +90,7 @@ try {
       }
       // どうした？
       if (HMM_REGEX.test(message.content)) {
-        await message.reply(
+        await reply(
           shuffleWord([
             "どうした？",
             "どしたん？",
@@ -116,13 +117,13 @@ try {
       ]);
       // ゴリラ語
       if (["ウホッ", "うほっ"].includes(message.content)) {
-        await message.reply(`いい<@${message.author.id}>・・・`);
+        await reply(`いい<@${message.author.id}>・・・`);
       } else if (UHO_REGEX.test(message.content)) {
-        await message.reply(
+        await reply(
           Array.from(
             { length: (Math.random() * 10) | 0 },
             () => UHOS[Math.floor(Math.random() * UHOS.length)]
-          ).join("") || "・・・。"
+          ).join("") || NO_COMMENT
         );
       }
     }
