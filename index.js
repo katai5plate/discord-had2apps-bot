@@ -45,7 +45,7 @@ try {
     res.send("Bot is ONLINE!");
   });
 
-  app.listen(3000, () => {});
+  app.listen(3023, () => {});
 
   client.on("ready", (message) => {
     console.log("Bot is running!");
