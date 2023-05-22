@@ -59,7 +59,6 @@ try {
       message.content === mes && (await message.reply(shuffleWord(replies)));
 
     if (message.author.id == client.user.id || message.author.bot) return;
-    console.log({ message });
     // メンション時のメッセージ
     if (message.mentions.has(client.user)) {
       if (/魔王$/.test(message.content))
@@ -69,7 +68,16 @@ try {
     if (!NO_REPLY_USERS_ID.includes(message.author.id)) {
       // 便乗
       if (MUR_REGEX.test(message.content.split(/\n/g).at(-1))) {
-        await message.reply(shuffleWord(["そうだよ（便乗）"]));
+        await message.reply(
+          shuffleWord([
+            "そうだよ（便乗）",
+            "そうだよ（便乗）",
+            "そうだよ²（二乗）",
+            "ソーダよ（炭酸）",
+            "そうだ！（ひらめき）",
+            "そう・・・かなぁ？（疑問）",
+          ])
+        );
       }
       // どうした？
       if (HMM_REGEX.test(message.content)) {
