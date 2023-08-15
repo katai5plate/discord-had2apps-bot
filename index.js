@@ -6,6 +6,7 @@ const client = new discord.Client({
   intents: Object.values(discord.IntentsBitField.Flags),
 });
 const { default: axios } = require("axios");
+const db = require("./db");
 
 const ENV_JSON = (() => {
   try {
@@ -46,6 +47,8 @@ const UHOS = [
   ...UHO_BASIC.map((x) => `${x}？`),
 ];
 const NO_COMMENT = "・・・。";
+const DEL_REGEX =
+  /^(削除|(消|け)して|やっぱ?なし|やめて?|なしで?|delete|kesite|yame)$/;
 
 const shuffleWord = (arr) => {
   let cumulativeWeight = 0;
@@ -70,6 +73,7 @@ try {
     client.user.setActivity(PLAYING_ON, {
       type: discord.ActivityType.Playing,
     });
+    db.init();
   });
 
   client.on("messageCreate", async (message) => {
@@ -77,7 +81,7 @@ try {
     const instantPost = async (mes, replies) =>
       message.content === mes && (await reply(shuffleWord(replies)));
 
-    if (message.author.id == client.user.id || message.author.bot) return;
+    if (message.author.id === client.user.id || message.author.bot) return;
 
     // メンション時のメッセージ
     if (message.mentions.has(client.user)) {
@@ -187,21 +191,7 @@ try {
     // 指示者と同じ人限定で bot の発言を消せる機能
     try {
       const repliedId = message.reference?.messageId;
-      if (
-        !message.author.bot &&
-        repliedId &&
-        [
-          "削除",
-          "消して",
-          "けして",
-          "やっぱなし",
-          "やめて",
-          "やめ",
-          "delete",
-          "kesite",
-          "yame",
-        ].includes(message.content)
-      ) {
+      if (repliedId && DEL_REGEX.test(message.content)) {
         const replied = await message.channel.messages.fetch(repliedId);
         if (replied.author.bot) {
           const originId = replied.reference?.messageId;
@@ -241,6 +231,21 @@ try {
           break;
       }
     }
+    // ログ集計
+    await db.write(
+      "messages",
+      (mes) => [
+        ...mes,
+        {
+          guildId: message.guild?.id,
+          channelId: message.channel.id,
+          authorId: message.author.id,
+          createdAt: message.createdAt,
+          size: message.content.length,
+        },
+      ],
+      []
+    );
   });
   if (DISCORD_BOT_TOKEN == undefined) {
     console.log("DISCORD_BOT_TOKEN is not defined!");
