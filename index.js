@@ -5,6 +5,7 @@ const client = new discord.Client({
   partials: Object.values(discord.Partials),
   intents: Object.values(discord.IntentsBitField.Flags),
 });
+const { default: axios } = require("axios");
 
 const ENV_JSON = (() => {
   try {
@@ -77,6 +78,7 @@ try {
       message.content === mes && (await reply(shuffleWord(replies)));
 
     if (message.author.id == client.user.id || message.author.bot) return;
+
     // メンション時のメッセージ
     if (message.mentions.has(client.user)) {
       if (/魔王$/.test(message.content)) await reply(shuffleWord(["把握"]));
@@ -134,6 +136,51 @@ try {
             () => UHOS[Math.floor(Math.random() * UHOS.length)]
           ).join("") || NO_COMMENT
         );
+      }
+      if (/^https:\/\/(twitter|x)\.com\/.+$/.test(message.content)) {
+        const url = message.content;
+        try {
+          const fix = url.replace(/(twitter|x)\.com/, "fxtwitter.com");
+          await reply(fix);
+        } catch (error) {
+          await reply(`エラー: ${error.toString()}`);
+        }
+      }
+      if (/^ex https:\/\/(twitter|x)\.com\/.+$/.test(message.content)) {
+        const url = message.content;
+        try {
+          const api = url
+            .match(/^ex (.+?)$/)
+            .at(1)
+            .replace(/(twitter|x)\.com/, "api.fxtwitter.com");
+          const { tweet } = (await axios.get(api)).data;
+          const media = tweet?.media?.all ?? [];
+          await reply({
+            embeds: [
+              {
+                title: tweet.author.name,
+                url: tweet.url,
+                author: {
+                  name: `@${tweet.author.screen_name}`,
+                  icon_url: tweet.author.avatar_url,
+                  url: `https://twitter.com/${tweet.author.screen_name}`,
+                },
+                description: tweet.text,
+                footer: {
+                  text: `${tweet.replies} 💬 \t ${tweet.retweets} 🔁 \t ${tweet.likes} ❤️ \t ${tweet.views} 👁️\n`,
+                },
+              },
+              ...media.map(({ url }, index) => ({
+                description: index + 1,
+                image: {
+                  url,
+                },
+              })),
+            ],
+          });
+        } catch (error) {
+          await reply(`エラー: ${error.toString()}`);
+        }
       }
     }
     // プレフィックスコマンド
