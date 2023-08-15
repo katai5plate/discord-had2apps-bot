@@ -184,6 +184,40 @@ try {
         await reply(`エラー: ${error.toString()}`);
       }
     }
+    // 指示者と同じ人限定で bot の発言を消せる機能
+    try {
+      const repliedId = message.reference?.messageId;
+      if (
+        !message.author.bot &&
+        repliedId &&
+        [
+          "削除",
+          "消して",
+          "けして",
+          "やっぱなし",
+          "やめて",
+          "やめ",
+          "delete",
+          "kesite",
+          "yame",
+        ].includes(message.content)
+      ) {
+        const replied = await message.channel.messages.fetch(repliedId);
+        if (replied.author.bot) {
+          const originId = replied.reference?.messageId;
+          if (originId) {
+            const origin = await message.channel.messages.fetch(originId);
+            if (origin.author.id === message.author.id) {
+              await replied.delete();
+            }
+          }
+        }
+      }
+    } catch (error) {
+      await reply(
+        `多分返信先のメッセージ消えてるから削除していいのかわからん。\nエラー: ${error.toString()}`
+      );
+    }
     // プレフィックスコマンド
     if (message.content.startsWith(PREFIX)) {
       const args = message.content.slice(PREFIX.length).trim().split(/ +/g);
