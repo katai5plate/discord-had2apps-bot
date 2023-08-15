@@ -137,50 +137,51 @@ try {
           ).join("") || NO_COMMENT
         );
       }
-      if (/^https:\/\/(twitter|x)\.com\/.+$/.test(message.content)) {
-        const url = message.content;
-        try {
-          const fix = url.replace(/(twitter|x)\.com/, "fxtwitter.com");
-          await reply(fix);
-        } catch (error) {
-          await reply(`エラー: ${error.toString()}`);
-        }
+    }
+    // 全ユーザー向け
+    if (/^https:\/\/(twitter|x)\.com\/.+$/.test(message.content)) {
+      const url = message.content;
+      try {
+        const fix = url.replace(/(twitter|x)\.com/, "fxtwitter.com");
+        await reply(fix);
+      } catch (error) {
+        await reply(`エラー: ${error.toString()}`);
       }
-      if (/^ex https:\/\/(twitter|x)\.com\/.+$/.test(message.content)) {
-        const url = message.content;
-        try {
-          const api = url
-            .match(/^ex (.+?)$/)
-            .at(1)
-            .replace(/(twitter|x)\.com/, "api.fxtwitter.com");
-          const { tweet } = (await axios.get(api)).data;
-          const media = tweet?.media?.all ?? [];
-          await reply({
-            embeds: [
-              {
-                title: tweet.author.name,
-                url: tweet.url,
-                author: {
-                  name: `@${tweet.author.screen_name}`,
-                  icon_url: tweet.author.avatar_url,
-                  url: `https://twitter.com/${tweet.author.screen_name}`,
-                },
-                description: tweet.text,
-                footer: {
-                  text: `${tweet.replies} 💬 \t ${tweet.retweets} 🔁 \t ${tweet.likes} ❤️ \t ${tweet.views} 👁️\n`,
-                },
+    }
+    if (/^ex https:\/\/(twitter|x)\.com\/.+$/.test(message.content)) {
+      const url = message.content;
+      try {
+        const api = url
+          .match(/^ex (.+?)$/)
+          .at(1)
+          .replace(/(twitter|x)\.com/, "api.fxtwitter.com");
+        const { tweet } = (await axios.get(api)).data;
+        const media = tweet?.media?.all ?? [];
+        await reply({
+          embeds: [
+            {
+              title: tweet.author.name,
+              url: tweet.url,
+              author: {
+                name: `@${tweet.author.screen_name}`,
+                icon_url: tweet.author.avatar_url,
+                url: `https://twitter.com/${tweet.author.screen_name}`,
               },
-              ...media.map(({ url }, index) => ({
-                description: index + 1,
-                image: {
-                  url,
-                },
-              })),
-            ],
-          });
-        } catch (error) {
-          await reply(`エラー: ${error.toString()}`);
-        }
+              description: tweet.text,
+              footer: {
+                text: `${tweet.replies} 💬 \t ${tweet.retweets} 🔁 \t ${tweet.likes} ❤️ \t ${tweet.views} 👁️\n`,
+              },
+            },
+            ...media.map(({ url }, index) => ({
+              description: index + 1,
+              image: {
+                url,
+              },
+            })),
+          ],
+        });
+      } catch (error) {
+        await reply(`エラー: ${error.toString()}`);
       }
     }
     // プレフィックスコマンド
