@@ -1,11 +1,8 @@
 //@ts-check
 
 import { PREFIX } from "../constants.js";
-import { useMessage } from "../utils.js";
 
 export default async ({ message }) => {
-  const { reply } = useMessage(message);
-
   if (message.content.startsWith(PREFIX)) {
     const args = message.content.slice(PREFIX.length).trim().split(/ +/g);
     const command = args.shift()?.toLowerCase();

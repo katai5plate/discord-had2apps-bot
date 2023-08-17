@@ -7,7 +7,6 @@ import {
   DISCORD_BOT_TOKEN,
   NO_REPLY_USERS_ID,
   PLAYING_ON,
-  PREFIX,
 } from "./constants.js";
 import maou from "./chats/maou.js";
 import random from "./chats/random.js";
