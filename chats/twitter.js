@@ -12,14 +12,18 @@ export default async ({ message }) => {
     const tweet = await useTweet(message.content);
     if (!tweet) return await reply("ツイートが取得できなかったよ");
     let result = "";
-    if (tweet.media.all?.at(0)?.type === "photo") {
-      result = `画像リンク\n${(
-        tweet.media.all?.map(({ url }, i) => `${i + 1} <${url}>`) ?? []
-      ).join("\n")}`;
+    if (tweet.media.all?.length === 1) {
+      result = tweet.media.all.at(0)?.url ?? "";
     } else {
-      result = (tweet.media.all?.map(({ url }) => url) ?? []).join("\n");
+      result = `${(
+        tweet.media.all?.map(
+          ({ url }, i) => `${i + 1} ${i === 0 ? url : `<${url}>`}`
+        ) ?? []
+      ).join("\n")}`;
     }
-    await post(`||[POSTED BY <@${message.author.id}>]||\n${result}`);
+    await post(
+      `||[POSTED BY <@${message.author.id}>]||\n元ツイ: <${tweet.url}>\n${result}`
+    );
     await message.delete();
   }
 };

@@ -12,14 +12,17 @@ export default async ({ message }) => {
       message.channel.messages.fetch(message.reference?.messageId ?? "")
     );
     if (botMes?.author.bot) {
+      const deleteMes = async () => {
+        await botMes.delete();
+        await message.delete();
+      };
       const callMes = await tryit(() =>
         message.channel.messages.fetch(botMes.reference?.messageId ?? "")
       );
-      if (callMes?.author?.id === message.author.id)
-        return await botMes.delete();
+      if (callMes?.author?.id === message.author.id) return await deleteMes();
       const [, postedUser] =
         botMes.content.match(/\[POSTED BY <@(.*?)>\]/) ?? [];
-      if (postedUser === message.author.id) return await botMes.delete();
+      if (postedUser === message.author.id) return await deleteMes();
     }
     return await reply("消していいのか判断つかない・・・すまんな");
   }
