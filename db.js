@@ -1,21 +1,22 @@
-const fs = require("fs/promises");
+//@ts-check
 
-const PATH = "./db.json";
+import fs from "fs/promises";
+import { DB_PATH } from "./constants.js";
 
 let cache = {};
 
-module.exports.init = async () => {
+export const init = async () => {
   try {
-    await fs.access(PATH);
-    cache = JSON.parse(await fs.readFile(PATH, "utf8"));
+    await fs.access(DB_PATH);
+    cache = JSON.parse(await fs.readFile(DB_PATH, "utf8"));
   } catch {
-    await fs.writeFile(PATH, JSON.stringify(cache));
+    await fs.writeFile(DB_PATH, JSON.stringify(cache));
   }
 };
 
-module.exports.read = async (key) => (key ? cache[key] : cache);
+export const read = async (key) => (key ? cache[key] : cache);
 
-module.exports.write = async (key, fn, init = null) => {
+export const write = async (key, fn, init = null) => {
   cache[key] = fn(cache[key] ?? init);
-  await fs.writeFile(PATH, JSON.stringify(cache));
+  await fs.writeFile(DB_PATH, JSON.stringify(cache));
 };
