@@ -1,23 +1,35 @@
 //@ts-check
 import axios from "axios";
 import { NO_COMMENT } from "./constants.js";
+/** @typedef {import("./type.d.ts").Message} Message */
 /** @typedef {import("./type.d.ts").FixTweetAPI} FixTweetAPI */
 /** @typedef {import("./type.d.ts").FixTweetAPITweet} FixTweetAPITweet */
 
+/** @param {string[]} arr */
 export const shuffleWord = (arr) => {
   let cumulativeWeight = 0;
-  return arr.find((_, i) => {
-    cumulativeWeight += 1 / Math.pow(2, i);
-    return (
-      Math.random() * arr.reduce((acc, _, i) => acc + 1 / Math.pow(2, i), 0) <=
-      cumulativeWeight
-    );
-  });
+  return (
+    arr.find((_, i) => {
+      cumulativeWeight += 1 / Math.pow(2, i);
+      return (
+        Math.random() *
+          arr.reduce((acc, _, i) => acc + 1 / Math.pow(2, i), 0) <=
+        cumulativeWeight
+      );
+    }) ?? ""
+  );
 };
 
+/** @param {Message} messageObj */
 export const useMessage = (messageObj) => {
+  /** @param {string} mes */
   const reply = async (mes) => messageObj.reply(mes || NO_COMMENT);
+  /** @param {string} mes */
   const post = async (mes) => messageObj.channel.send(mes || NO_COMMENT);
+  /**
+   * @param {string} mes
+   * @param {string[]} replies
+   */
   const instantPost = async (mes, replies) =>
     messageObj.content === mes && (await reply(shuffleWord(replies)));
   return { reply, post, instantPost };

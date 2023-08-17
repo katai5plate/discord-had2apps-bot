@@ -16,8 +16,9 @@ export interface DatabaseJSON {
   }[];
 }
 
+export type Message = discord.Message<boolean>;
 export interface Connect {
-  message: discord.Message<boolean>;
+  message: Message;
   client: discord.Client<boolean>;
   error?: Error | TypeError;
 }

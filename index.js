@@ -18,19 +18,18 @@ import exception from "./chats/exception.js";
 const app = express();
 const client = new discord.Client({
   //@ts-ignore
-  partials: Object.values(discord.Partials),
-  //@ts-ignore
+  partials: Object.values(discord.Partials), //@ts-ignore
   intents: Object.values(discord.IntentsBitField.Flags),
 });
 
 try {
-  app.get("/", (req, res) => {
+  app.get("/", (_, res) => {
     res.send("Bot is ONLINE!");
   });
 
   app.listen(3023, () => {});
 
-  client.on("ready", async (message) => {
+  client.on("ready", async (_) => {
     console.log("Bot is running!");
     client.user?.setActivity(PLAYING_ON, {
       type: discord.ActivityType.Playing,
