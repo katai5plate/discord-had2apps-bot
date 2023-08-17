@@ -13,7 +13,6 @@ import twitter from "./chats/twitter.js";
 import remove from "./chats/remove.js";
 import prefix from "./chats/prefix.js";
 /** @typedef {import("./type.d.ts").Connect} Connect */
-/** @typedef {import("./type.d.ts").DatabaseJSON} DatabaseJSON */
 
 const app = express();
 const client = new discord.Client({
