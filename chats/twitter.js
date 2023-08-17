@@ -1,56 +1,51 @@
 //@ts-check
 import axios from "axios";
 import { TWT_REGEX } from "../constants.js";
-import { useMessage } from "../utils.js";
+import { useMessage, useTweet } from "../utils.js";
 /** @typedef {import("../type.d.ts").ChatFunction} ChatFunction */
 
 /** @type {ChatFunction} */
 export default async ({ message }) => {
-  const { reply } = useMessage(message);
+  const { reply, post } = useMessage(message);
+
+  const errorReply = () => reply("ツイートが取得できなかったよ");
 
   if (TWT_REGEX("^").test(message.content)) {
-    const url = message.content;
-    try {
-      const fix = url.replace(/(twitter|x)\.com/, "fxtwitter.com");
-      await reply(fix);
-    } catch (error) {
-      await reply(`エラー: ${error.toString()}`);
+    const tweet = await useTweet(message.content);
+    if (!tweet) return await errorReply();
+    let result = "";
+    if (tweet.media.all?.at(0)?.type === "photo") {
+      result = `画像リンク\n${(
+        tweet.media.all?.map(({ url }, i) => `${i + 1} <${url}>`) ?? []
+      ).join("\n")}`;
+    } else {
+      result = (tweet.media.all?.map(({ url }) => url) ?? []).join("\n");
     }
-  }
-  if (TWT_REGEX("^ex ").test(message.content)) {
-    const url = message.content;
-    try {
-      const api = (url.match(/^ex (.+?)$/)?.at(1) ?? "").replace(
-        /(twitter|x)\.com/,
-        "api.fxtwitter.com"
-      );
-      const { tweet } = (await axios.get(api)).data;
-      const media = tweet?.media?.all ?? [];
-      await reply({
-        embeds: [
-          {
-            title: tweet.author.name,
-            url: tweet.url,
-            author: {
-              name: `@${tweet.author.screen_name}`,
-              icon_url: tweet.author.avatar_url,
-              url: `https://twitter.com/${tweet.author.screen_name}`,
-            },
-            description: tweet.text,
-            footer: {
-              text: `${tweet.replies} 💬 \t ${tweet.retweets} 🔁 \t ${tweet.likes} ❤️ \t ${tweet.views} 👁️\n`,
-            },
-          },
-          ...media.map(({ url }, index) => ({
-            description: index + 1,
-            image: {
-              url,
-            },
-          })),
-        ],
-      });
-    } catch (error) {
-      await reply(`エラー: ${error.toString()}`);
-    }
+    await post(`||[POSTED BY <@${message.author.id}>]||\n${result}`);
+    await message.delete();
   }
 };
+
+// await reply({
+//   embeds: [
+//     {
+//       title: tweet.author.name,
+//       url: tweet.url,
+//       author: {
+//         name: `@${tweet.author.screen_name}`,
+//         icon_url: tweet.author.avatar_url,
+//         url: `https://twitter.com/${tweet.author.screen_name}`,
+//       },
+//       description: tweet.text,
+//       footer: {
+//         text: `${tweet.replies} 💬 \t ${tweet.retweets} 🔁 \t ${tweet.likes} ❤️ \t ${tweet.views} 👁️\n`,
+//       },
+//     },
+//     ...media.map(({ url }, index) => ({
+//       description: index + 1,
+//       image: {
+//         url,
+//       },
+//     })),
+//   ],
+// });

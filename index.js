@@ -12,6 +12,7 @@ import random from "./chats/random.js";
 import twitter from "./chats/twitter.js";
 import remove from "./chats/remove.js";
 import prefix from "./chats/prefix.js";
+import exception from "./chats/exception.js";
 /** @typedef {import("./type.d.ts").Connect} Connect */
 
 const app = express();
@@ -43,24 +44,24 @@ try {
     /** @type {Connect} */
     const connect = { message, client };
 
-    // メンション時のメッセージ
-    if (client?.user && message.mentions.has(client.user)) {
-      await maou(connect);
+    try {
+      // メンション時のメッセージ
+      if (client?.user && message.mentions.has(client.user)) {
+        await maou(connect);
+      }
+      // 返信しないリストに入っていないユーザーの発言
+      if (!NO_REPLY_USERS_ID.includes(message.author.id)) {
+        await random(connect);
+      }
+      // 全ユーザー向け
+      await twitter(connect);
+      // 指示者と同じ人限定で bot の発言を消せる機能
+      await remove(connect);
+      // プレフィックスコマンド
+      await prefix(connect);
+    } catch (error) {
+      await exception({ ...connect, error });
     }
-
-    // 返信しないリストに入っていないユーザーの発言
-    if (!NO_REPLY_USERS_ID.includes(message.author.id)) {
-      await random(connect);
-    }
-
-    // 全ユーザー向け
-    await twitter(connect);
-
-    // 指示者と同じ人限定で bot の発言を消せる機能
-    await remove(connect);
-
-    // プレフィックスコマンド
-    await prefix(connect);
 
     // ログ集計
     await db.write(

@@ -1,29 +1,26 @@
 //@ts-check
 import { DEL_REGEX } from "../constants.js";
-import { useMessage } from "../utils.js";
+import { tryit, useMessage } from "../utils.js";
 /** @typedef {import("../type.d.ts").ChatFunction} ChatFunction */
 
 /** @type {ChatFunction} */
 export default async ({ message }) => {
   const { reply } = useMessage(message);
 
-  try {
-    const repliedId = message.reference?.messageId;
-    if (repliedId && DEL_REGEX.test(message.content)) {
-      const replied = await message.channel.messages.fetch(repliedId);
-      if (replied.author.bot) {
-        const originId = replied.reference?.messageId;
-        if (originId) {
-          const origin = await message.channel.messages.fetch(originId);
-          if (origin.author.id === message.author.id) {
-            await replied.delete();
-          }
-        }
-      }
-    }
-  } catch (error) {
-    await reply(
-      `多分返信先のメッセージ消えてるから削除していいのかわからん。\nエラー: ${error.toString()}`
+  if (DEL_REGEX.test(message.content)) {
+    const botMes = await tryit(() =>
+      message.channel.messages.fetch(message.reference?.messageId ?? "")
     );
+    if (botMes?.author.bot) {
+      const callMes = await tryit(() =>
+        message.channel.messages.fetch(botMes.reference?.messageId ?? "")
+      );
+      if (callMes?.author?.id === message.author.id)
+        return await botMes.delete();
+      const [, postedUser] =
+        botMes.content.match(/\[POSTED BY <@(.*?)>\]/) ?? [];
+      if (postedUser === message.author.id) return await botMes.delete();
+    }
+    return await reply("消していいのか判断つかない・・・すまんな");
   }
 };
