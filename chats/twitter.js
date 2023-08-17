@@ -1,10 +1,10 @@
 //@ts-check
-
 import axios from "axios";
 import { TWT_REGEX } from "../constants.js";
 import { useMessage } from "../utils.js";
+/** @typedef {import("../type.d.ts").ChatFunction} ChatFunction */
 
-/** @type {import("../type.d.ts").ChatFunction} */
+/** @type {ChatFunction} */
 export default async ({ message }) => {
   const { reply } = useMessage(message);
 

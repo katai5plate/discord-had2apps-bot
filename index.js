@@ -1,5 +1,4 @@
 //@ts-check
-
 import express from "express";
 import discord from "discord.js";
 import * as db from "./db.js";
@@ -13,6 +12,8 @@ import random from "./chats/random.js";
 import twitter from "./chats/twitter.js";
 import remove from "./chats/remove.js";
 import prefix from "./chats/prefix.js";
+/** @typedef {import("./type.d.ts").Connect} Connect */
+/** @typedef {import("./type.d.ts").DatabaseJSON} DatabaseJSON */
 
 const app = express();
 const client = new discord.Client({
@@ -40,7 +41,7 @@ try {
   client.on("messageCreate", async (message) => {
     if (message.author.id === client.user?.id || message.author.bot) return;
 
-    /** @type {import("./type.d.ts").Connect} */
+    /** @type {Connect} */
     const connect = { message, client };
 
     // メンション時のメッセージ
@@ -75,7 +76,6 @@ try {
           size: message.content.length,
         },
       ],
-      //@ts-ignore
       []
     );
   });

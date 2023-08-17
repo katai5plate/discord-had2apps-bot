@@ -1,5 +1,4 @@
 //@ts-check
-
 import {
   HMM_REGEX,
   MUR_REGEX,
@@ -8,8 +7,9 @@ import {
   UHO_REGEX,
 } from "../constants.js";
 import { shuffleWord, useMessage } from "../utils.js";
+/** @typedef {import("../type.d.ts").ChatFunction} ChatFunction */
 
-/** @type {import("../type.d.ts").ChatFunction} */
+/** @type {ChatFunction} */
 export default async ({ message }) => {
   const { reply, instantPost } = useMessage(message);
 

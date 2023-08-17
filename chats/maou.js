@@ -1,8 +1,8 @@
 //@ts-check
-
 import { PREFIX } from "../constants.js";
+/** @typedef {import("../type.d.ts").ChatFunction} ChatFunction */
 
-/** @type {import("../type.d.ts").ChatFunction} */
+/** @type {ChatFunction} */
 export default async ({ message }) => {
   if (message.content.startsWith(PREFIX)) {
     const args = message.content.slice(PREFIX.length).trim().split(/ +/g);

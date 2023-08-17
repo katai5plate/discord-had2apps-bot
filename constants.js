@@ -1,9 +1,10 @@
 //@ts-check
-
 import fs from "fs";
+/** @typedef {import("./type.d.ts").EnvJSON} EnvJSON */
 
 export const DB_PATH = "./db.json";
 
+/** @type {Partial<EnvJSON>} */
 const ENV_JSON = (() => {
   try {
     return JSON.parse(fs.readFileSync("./env.json", { encoding: "utf8" }));
@@ -12,15 +13,14 @@ const ENV_JSON = (() => {
     return {};
   }
 })();
-
 const ENV = {
   ...process.env,
   ...ENV_JSON,
 };
-
 export const DISCORD_BOT_TOKEN = ENV.DISCORD_BOT_TOKEN;
-
-export const NO_REPLY_USERS_ID = ENV.NO_REPLY_USERS_ID_COMMA.split(/,/g);
+export const NO_REPLY_USERS_ID = (ENV.NO_REPLY_USERS_ID_COMMA ?? "").split(
+  /,/g
+);
 
 export const PLAYING_ON = "はど開発室";
 export const PREFIX = "alxo?";
@@ -30,6 +30,11 @@ export const MUR_REGEX =
   /.+(かな[ぁあ]?|かね[ぇえ]?|かよ[ぉお]?|すか|すね[ぇえ]?|だな[ぁあ]?|だね[ぇえ]?|だよ[ぉおねぇえ]?|やね[ぇえ]?|やな[ぁあ]?|よな[ぁあ]?|よね[ぇえ]?|るか[ぁあ]?|るな[ぁあ]?)([。！？ｗ・,…‥～ー])?$/u;
 export const HMM_REGEX =
   /^(うーん|あれ[ー～？]?|あら(ま[ぁあ]?)?|あれまぁ?|変だな|おかしいな|なんか(変|おかしいな?))$/;
+export const DEL_REGEX =
+  /^(削除|(消|け)して|やっぱ?なし|やめて?|なしで?|delete|kesite|yame)$/;
+export const TWT_REGEX = (prefix) =>
+  new RegExp(`${prefix}https:\\/\\/(twitter|x)\\.com\\/.+$`);
+
 export const UHO_REGEX = /^[ウゥホッォオー～・！？。、…\n]+$/;
 const UHO_BASIC = [
   "ウホ",
@@ -46,8 +51,5 @@ export const UHOS = [
   ...UHO_BASIC.map((x) => `${x}！`),
   ...UHO_BASIC.map((x) => `${x}？`),
 ];
+
 export const NO_COMMENT = "・・・。";
-export const DEL_REGEX =
-  /^(削除|(消|け)して|やっぱ?なし|やめて?|なしで?|delete|kesite|yame)$/;
-export const TWT_REGEX = (prefix) =>
-  new RegExp(`${prefix}https:\\/\\/(twitter|x)\\.com\\/.+$`);
