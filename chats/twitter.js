@@ -8,11 +8,9 @@ import { useMessage, useTweet } from "../utils.js";
 export default async ({ message }) => {
   const { reply, post } = useMessage(message);
 
-  const errorReply = () => reply("ツイートが取得できなかったよ");
-
-  if (TWT_REGEX("^").test(message.content)) {
+  if (TWT_REGEX.test(message.content)) {
     const tweet = await useTweet(message.content);
-    if (!tweet) return await errorReply();
+    if (!tweet) return await reply("ツイートが取得できなかったよ");
     let result = "";
     if (tweet.media.all?.at(0)?.type === "photo") {
       result = `画像リンク\n${(

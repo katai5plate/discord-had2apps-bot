@@ -32,8 +32,7 @@ export const HMM_REGEX =
   /^(うーん|あれ[ー～？]?|あら(ま[ぁあ]?)?|あれまぁ?|変だな|おかしいな|なんか(変|おかしいな?))$/;
 export const DEL_REGEX =
   /^(削除|(消|け)して|やっぱ?なし|やめて?|なしで?|delete|kesite|yame)$/;
-export const TWT_REGEX = (prefix) =>
-  new RegExp(`${prefix}https:\\/\\/(twitter|x)\\.com\\/.+$`);
+export const TWT_REGEX = /^https:\/\/(twitter|x)\.com\/.+$/;
 
 export const UHO_REGEX = /^[ウゥホッォオー～・！？。、…\n]+$/;
 const UHO_BASIC = [
