@@ -2,6 +2,7 @@
 
 import { PREFIX } from "../constants.js";
 
+/** @type {import("../type.d.ts").ChatFunction} */
 export default async ({ message }) => {
   if (message.content.startsWith(PREFIX)) {
     const args = message.content.slice(PREFIX.length).trim().split(/ +/g);

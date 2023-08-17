@@ -3,6 +3,7 @@
 import { DEL_REGEX } from "../constants.js";
 import { useMessage } from "../utils.js";
 
+/** @type {import("../type.d.ts").ChatFunction} */
 export default async ({ message }) => {
   const { reply } = useMessage(message);
 

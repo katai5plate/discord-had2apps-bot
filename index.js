@@ -40,6 +40,7 @@ try {
   client.on("messageCreate", async (message) => {
     if (message.author.id === client.user?.id || message.author.bot) return;
 
+    /** @type {import("./type.d.ts").Connect} */
     const connect = { message, client };
 
     // メンション時のメッセージ

@@ -4,6 +4,7 @@ import axios from "axios";
 import { TWT_REGEX } from "../constants.js";
 import { useMessage } from "../utils.js";
 
+/** @type {import("../type.d.ts").ChatFunction} */
 export default async ({ message }) => {
   const { reply } = useMessage(message);
 
@@ -19,10 +20,10 @@ export default async ({ message }) => {
   if (TWT_REGEX("^ex ").test(message.content)) {
     const url = message.content;
     try {
-      const api = url
-        .match(/^ex (.+?)$/)
-        .at(1)
-        .replace(/(twitter|x)\.com/, "api.fxtwitter.com");
+      const api = (url.match(/^ex (.+?)$/)?.at(1) ?? "").replace(
+        /(twitter|x)\.com/,
+        "api.fxtwitter.com"
+      );
       const { tweet } = (await axios.get(api)).data;
       const media = tweet?.media?.all ?? [];
       await reply({

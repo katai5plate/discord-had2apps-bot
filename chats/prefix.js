@@ -3,6 +3,7 @@
 import { MAO_REGEX } from "../constants.js";
 import { shuffleWord, useMessage } from "../utils.js";
 
+/** @type {import("../type.d.ts").ChatFunction} */
 export default async ({ message }) => {
   const { reply } = useMessage(message);
 

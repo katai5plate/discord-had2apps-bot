@@ -9,11 +9,12 @@ import {
 } from "../constants.js";
 import { shuffleWord, useMessage } from "../utils.js";
 
+/** @type {import("../type.d.ts").ChatFunction} */
 export default async ({ message }) => {
   const { reply, instantPost } = useMessage(message);
 
   // 便乗
-  if (MUR_REGEX.test(message.content.split(/\n/g).at(-1))) {
+  if (MUR_REGEX.test(message.content.split(/\n/g).at(-1) ?? "")) {
     await reply(
       shuffleWord([
         "そうだよ（便乗）",
