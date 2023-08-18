@@ -114,7 +114,6 @@ export default async ({ message }) => {
     // URLが添付されている
     const urls = textToUrls(texts.join("\n"));
     if (urls.length) {
-      console.log(texts);
       previews.push("シェア:");
       for (const urlPreview of urls) {
         previews.push(urlPreview);
