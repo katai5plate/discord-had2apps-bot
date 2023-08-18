@@ -33,6 +33,7 @@ export const HMM_REGEX =
 export const IRUKA_REGEX = /お(前|まえ)を(消|け)す/;
 export const DEL_REGEX =
   /^(削除|(消|け)して|やっぱ?なし|やめて?|なしで?|delete|kesite|yame)$/;
+export const TWT_DOMAIN_RAGEX = /(twitter|x)\.com/;
 export const TWT_REGEX = /^https:\/\/(twitter|x)\.com\/.+$/;
 export const POSTED_REGEX = /\[POSTED BY <@(\d+?)>\]/;
 
@@ -54,3 +55,6 @@ export const UHOS = [
 ];
 
 export const NO_COMMENT = "・・・。";
+
+export const TWEET_IS_ERROR = Symbol("TWEET_IS_ERROR");
+export const TWEET_IS_NSFW = Symbol("TWEET_IS_NSFW");

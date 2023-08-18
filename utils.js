@@ -1,6 +1,11 @@
 //@ts-check
 import axios from "axios";
-import { NO_COMMENT } from "./constants.js";
+import {
+  NO_COMMENT,
+  TWEET_IS_ERROR,
+  TWEET_IS_NSFW,
+  TWT_DOMAIN_RAGEX,
+} from "./constants.js";
 /** @typedef {import("./type.d.ts").Message} Message */
 /** @typedef {import("./type.d.ts").FixTweetAPI} FixTweetAPI */
 /** @typedef {import("./type.d.ts").FixTweetAPITweet} FixTweetAPITweet */
@@ -37,14 +42,26 @@ export const useMessage = (messageObj) => {
 
 /**
  * @param {string} url
- * @returns {Promise<FixTweetAPITweet | null>}
+ * @returns {Promise<FixTweetAPITweet | typeof TWEET_IS_ERROR |typeof TWEET_IS_NSFW>}
  */
 export const useTweet = async (url) => {
-  /** @type {FixTweetAPI} */
-  const res = (
-    await axios.get(url.replace(/(twitter|x)\.com/, "api.fxtwitter.com"))
-  ).data;
-  return res.tweet ?? null;
+  /** @type {FixTweetAPI | typeof TWEET_IS_ERROR |typeof TWEET_IS_NSFW} */
+  const res = await (async () => {
+    try {
+      return await axios
+        .get(url.replace(TWT_DOMAIN_RAGEX, "api.fxtwitter.com"))
+        .then(({ data }) => data);
+    } catch (error) {
+      // なぜかこれでないと取れない
+      const status = JSON.parse(JSON.stringify(error)).status;
+      if (status === 500) return TWEET_IS_NSFW;
+      return TWEET_IS_ERROR;
+    }
+  })();
+  if (!res) return TWEET_IS_ERROR;
+  if (res === TWEET_IS_ERROR) return TWEET_IS_ERROR;
+  if (res === TWEET_IS_NSFW) return TWEET_IS_NSFW;
+  return res?.tweet ?? TWEET_IS_ERROR;
 };
 
 /**
