@@ -35,7 +35,7 @@ export default async ({ message }) => {
     const texts = [tweet.text];
     /** @type {string[]} */
     const previews = [];
-    const { quote, views } = tweet;
+    const { poll, quote, views } = tweet;
     const { all, mosaic } = tweet.media ?? {};
 
     /** @param {FixTweetAPITweet["author"]} author */
@@ -73,6 +73,20 @@ export default async ({ message }) => {
       }
       return results;
     };
+
+    // 投票がある
+    if (poll) {
+      texts.push("");
+      for (const { label, count, percentage } of poll.choices) {
+        texts.push(`${label}`);
+        texts.push(
+          `: ${"█".repeat(percentage / 5) || "|"} ${percentage}% (${count}/${
+            poll.total_votes
+          })`
+        );
+      }
+      texts.push(`投票終了: ${new Date(poll.ends_at).toLocaleString()}`);
+    }
 
     // メディアがある
     for (const mainPreview of getPreviews(all)) {
