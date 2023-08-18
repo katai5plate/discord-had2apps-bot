@@ -54,6 +54,13 @@ interface FixTweetAPIMosaic {
     jpeg: string;
   };
 }
+export interface FixTweetAPIMedia {
+  all?: (FixTweetAPIPhoto | FixTweetAPIVideo)[];
+  external?: FixTweetAPIYouTube[];
+  photos?: FixTweetAPIPhoto[];
+  videos?: FixTweetAPIVideo[];
+  mosaic?: FixTweetAPIMosaic;
+}
 export interface FixTweetAPITweet {
   id: string;
   url: string;
@@ -93,13 +100,7 @@ export interface FixTweetAPITweet {
     source_lang: string;
     target_lang: string;
   };
-  media: {
-    all?: (FixTweetAPIPhoto | FixTweetAPIVideo)[];
-    external?: FixTweetAPIYouTube[];
-    photos?: FixTweetAPIPhoto[];
-    videos?: FixTweetAPIVideo[];
-    mosaic?: FixTweetAPIMosaic;
-  };
+  media?: FixTweetAPIMedia;
 }
 export interface FixTweetAPI {
   code: 200 | 401 | 404 | 500;

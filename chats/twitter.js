@@ -6,7 +6,8 @@ import {
   TWT_DOMAIN_RAGEX,
   TWT_REGEX,
 } from "../constants.js";
-import { useMessage, useTweet } from "../utils.js";
+import { textToUrls, useMessage, useTweet } from "../utils.js";
+/** @typedef {import("../type.d.ts").FixTweetAPIMedia} FixTweetAPIMedia */
 /** @typedef {import("../type.d.ts").FixTweetAPITweet} FixTweetAPITweet */
 /** @typedef {import("../type.d.ts").ChatFunction} ChatFunction */
 
@@ -41,7 +42,7 @@ export default async ({ message }) => {
     /** @param {FixTweetAPITweet["author"]} author */
     const getAuthor = (author) => `> ${author.name} (@${author.screen_name})`;
 
-    /** @param {FixTweetAPITweet["media"]["all"]} all */
+    /** @param {FixTweetAPIMedia["all"]} all */
     const getPreviews = (all) => {
       /** @type {string[]} */
       const results = [];
@@ -101,12 +102,22 @@ export default async ({ message }) => {
         const text = lines[i];
         texts.push(`| ${text}`);
       }
-      const quoteAll = quote.media.all;
+      const quoteAll = quote.media?.all;
       if (quoteAll) {
         previews.push("引用:");
         for (const quotePreview of getPreviews(quoteAll)) {
           previews.push(quotePreview);
         }
+      }
+    }
+
+    // URLが添付されている
+    const urls = textToUrls(texts.join("\n"));
+    if (urls.length) {
+      console.log(texts);
+      previews.push("シェア:");
+      for (const urlPreview of urls) {
+        previews.push(urlPreview);
       }
     }
 

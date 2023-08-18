@@ -5,6 +5,7 @@ import {
   TWEET_IS_ERROR,
   TWEET_IS_NSFW,
   TWT_DOMAIN_RAGEX,
+  URl_REGEX,
 } from "./constants.js";
 /** @typedef {import("./type.d.ts").Message} Message */
 /** @typedef {import("./type.d.ts").FixTweetAPI} FixTweetAPI */
@@ -78,3 +79,10 @@ export const tryit = async (fn, err = () => {}) => {
     return null;
   }
 };
+
+/**
+ * @param {string} text
+ * @returns {string[]}
+ */
+export const textToUrls = (text) =>
+  Array.from(text.matchAll(new RegExp(URl_REGEX, "g")), (match) => match[0]);

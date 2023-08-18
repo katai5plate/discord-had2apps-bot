@@ -36,6 +36,8 @@ export const DEL_REGEX =
 export const TWT_DOMAIN_RAGEX = /(twitter|x)\.com/;
 export const TWT_REGEX = /^https:\/\/(twitter|x)\.com\/.+$/;
 export const POSTED_REGEX = /\[POSTED BY <@(\d+?)>\]/;
+export const URl_REGEX =
+  /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
 export const UHO_REGEX = /^[ウゥホッォオー～・！？。、…\n]+$/;
 const UHO_BASIC = [
