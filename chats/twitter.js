@@ -22,7 +22,17 @@ export default async ({ message }) => {
       ).join("\n")}`;
     }
     await post(
-      `||[POSTED BY <@${message.author.id}>]||\n元ツイ: <${tweet.url}>\n${result}`
+      [
+        `||[POSTED BY <@${message.author.id}>]||`,
+        `<${tweet.url}> \`\`\``,
+        `> FROM ${tweet.author.name} (@${tweet.author.screen_name})`,
+        `${tweet.text}`,
+        `${tweet.replies} 💬 \t ${tweet.retweets} 🔁 \t ${tweet.likes} ❤️ \t ${
+          tweet.views ?? "???"
+        } 👁️`,
+        `\`\`\``,
+        result,
+      ].join("\n")
     );
     await message.delete();
   }
