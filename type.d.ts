@@ -98,7 +98,7 @@ export interface FixTweetAPITweet {
     external?: FixTweetAPIYouTube[];
     photos?: FixTweetAPIPhoto[];
     videos?: FixTweetAPIVideo[];
-    mosaic?: FixTweetAPIMosaic[];
+    mosaic?: FixTweetAPIMosaic;
   };
 }
 export interface FixTweetAPI {

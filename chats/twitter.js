@@ -2,6 +2,7 @@
 import axios from "axios";
 import { TWT_REGEX } from "../constants.js";
 import { useMessage, useTweet } from "../utils.js";
+/** @typedef {import("../type.d.ts").FixTweetAPITweet} FixTweetAPITweet */
 /** @typedef {import("../type.d.ts").ChatFunction} ChatFunction */
 
 /** @type {ChatFunction} */
@@ -11,27 +12,83 @@ export default async ({ message }) => {
   if (TWT_REGEX.test(message.content)) {
     const tweet = await useTweet(message.content);
     if (!tweet) return await reply("ツイートが取得できなかったよ");
-    let result = "";
-    if (tweet.media.all?.length === 1) {
-      result = tweet.media.all.at(0)?.url ?? "";
-    } else {
-      result = `${(
-        tweet.media.all?.map(
-          ({ url }, i) => `${i + 1} ${i === 0 ? url : `<${url}>`}`
-        ) ?? []
-      ).join("\n")}`;
+    /** @type {string[]} */
+    const texts = [tweet.text];
+    /** @type {string[]} */
+    const previews = [];
+    const { quote, views } = tweet;
+    const { all, mosaic } = tweet.media ?? {};
+
+    /** @param {FixTweetAPITweet["author"]} author */
+    const getAuthor = (author) =>
+      `> FROM ${author.name} (@${author.screen_name})`;
+
+    /** @param {FixTweetAPITweet["media"]["all"]} all */
+    const getPreviews = (all) => {
+      /** @type {string[]} */
+      const results = [];
+      if (all) {
+        // メディアは１つ以下
+        if (all.length <= 1) {
+          results.push(all.at(0)?.url ?? "");
+        }
+        // メディアはそれ以上
+        else if (all.length > 1) {
+          // モザイクプレビューがあるならモザイク＋リンクのみ
+          if (mosaic) {
+            results.push(`${mosaic.formats.webp ?? mosaic.formats.jpeg}`);
+            for (const i in all) {
+              const { url } = all[i];
+              results.push(`${+i + 1} <${url}>`);
+            }
+          }
+          // モザイクプレビューがないなら１枚目だけ表示
+          else {
+            for (const i in all) {
+              const { url } = all[i];
+              results.push(
+                `${+i + 1} ${+i === 0 ? `${url} (表示)` : `<${url}>`}`
+              );
+            }
+          }
+        }
+      }
+      return results;
+    };
+
+    // メディアがある
+    for (const mainPreview of getPreviews(all)) {
+      previews.push(mainPreview);
     }
+
+    // 引用がある
+    if (quote) {
+      const lines = quote.text.split(/\n/g);
+      texts.push(`| ${getAuthor(quote.author)}`);
+      for (const i in lines) {
+        const text = lines[i];
+        texts.push(`| ${text}`);
+      }
+      const quoteAll = quote.media.all;
+      if (quoteAll) {
+        previews.push("引用:");
+        for (const quotePreview of getPreviews(quoteAll)) {
+          previews.push(quotePreview);
+        }
+      }
+    }
+
     await post(
       [
-        `||[POSTED BY <@${message.author.id}>]||`,
+        `[POSTED BY <@${message.author.id}>]`,
         `<${tweet.url}> \`\`\``,
-        `> FROM ${tweet.author.name} (@${tweet.author.screen_name})`,
-        `${tweet.text}`,
-        `${tweet.replies} 💬 \t ${tweet.retweets} 🔁 \t ${tweet.likes} ❤️ \t ${
-          tweet.views ?? "???"
-        } 👁️`,
+        getAuthor(tweet.author),
+        ...texts,
+        `${tweet.replies} 💬 \t ${tweet.retweets} 🔁 \t ${tweet.likes} 💖 \t ${
+          views ? `${views} 👁️` : ""
+        }`,
         `\`\`\``,
-        result,
+        ...previews,
       ].join("\n")
     );
     await message.delete();
