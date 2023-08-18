@@ -1,6 +1,7 @@
 //@ts-check
 import {
   HMM_REGEX,
+  IRUKA_REGEX,
   MUR_REGEX,
   NO_COMMENT,
   UHOS,
@@ -65,4 +66,14 @@ export default async ({ message }) => {
       ).join("") || NO_COMMENT
     );
   }
+
+  // イルカ語
+  if (IRUKA_REGEX.test(message.content))
+    return await reply(
+      shuffleWord([
+        "🐬 ＜ ・・・。",
+        "🐬 ＜ お、やんのか？",
+        "🐬 ＜ 俺がお前を消してやってもいいんだぜ",
+      ])
+    );
 };

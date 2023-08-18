@@ -30,9 +30,11 @@ export const MUR_REGEX =
   /.+(かな[ぁあ]?|かね[ぇえ]?|かよ[ぉお]?|すか|すね[ぇえ]?|だな[ぁあ]?|だね[ぇえ]?|だよ[ぉおねぇえ]?|やね[ぇえ]?|やな[ぁあ]?|よな[ぁあ]?|よね[ぇえ]?|るか[ぁあ]?|るな[ぁあ]?)([。！？ｗ・,…‥～ー])?$/u;
 export const HMM_REGEX =
   /^(うーん|あれ[ー～？]?|あら(ま[ぁあ]?)?|あれまぁ?|変だな|おかしいな|なんか(変|おかしいな?))$/;
+export const IRUKA_REGEX = /お(前|まえ)を(消|け)す/;
 export const DEL_REGEX =
   /^(削除|(消|け)して|やっぱ?なし|やめて?|なしで?|delete|kesite|yame)$/;
 export const TWT_REGEX = /^https:\/\/(twitter|x)\.com\/.+$/;
+export const POSTED_REGEX = /\[POSTED BY <@(\d+?)>\]/;
 
 export const UHO_REGEX = /^[ウゥホッォオー～・！？。、…\n]+$/;
 const UHO_BASIC = [
