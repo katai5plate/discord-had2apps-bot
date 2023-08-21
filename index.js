@@ -13,6 +13,7 @@ import twitter from "./chats/twitter.js";
 import remove from "./chats/remove.js";
 import prefix from "./chats/prefix.js";
 import exception from "./chats/exception.js";
+import misskey from "./chats/misskey.js";
 /** @typedef {import("./type.d.ts").Connect} Connect */
 
 const app = express();
@@ -54,6 +55,7 @@ try {
       }
       // 全ユーザー向け
       await twitter(connect);
+      await misskey(connect);
       // 指示者と同じ人限定で bot の発言を消せる機能
       await remove(connect);
       // プレフィックスコマンド

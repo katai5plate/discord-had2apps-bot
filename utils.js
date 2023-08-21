@@ -1,5 +1,6 @@
 //@ts-check
 import axios from "axios";
+import fs from "fs";
 import {
   NO_COMMENT,
   TWEET_IS_ERROR,
@@ -86,3 +87,6 @@ export const tryit = async (fn, err = () => {}) => {
  */
 export const textToUrls = (text) =>
   Array.from(text.matchAll(new RegExp(URl_REGEX, "g")), (match) => match[0]);
+
+export const exportLog = (name, obj) =>
+  fs.writeFileSync(`${name}.log`, JSON.stringify(obj, null, 2));

@@ -4,6 +4,8 @@ export interface EnvJSON {
   DISCORD_BOT_TOKEN: string;
   NO_REPLY_USERS_ID_COMMA: string;
   // IGNORE_ANALYZE_CHANNEL_ID_COMMA: string;
+  MISSKEY_IO_API_TOKEN: string;
+  MISSKEY_GAMELORE_API_TOKEN: string;
 }
 
 export interface DatabaseJSON {
@@ -106,4 +108,72 @@ export interface FixTweetAPI {
   code: 200 | 401 | 404 | 500;
   message: "OK" | "PRIVATE_TWEET" | "NOT_FOUND" | "API_FAIL";
   tweet?: FixTweetAPITweet;
+}
+
+export interface MisskeyAPINoteShowFile {
+  id: string;
+  createdAt: string;
+  name: string;
+  type: string;
+  md5: string;
+  size: number;
+  isSensitive: boolean;
+  blurhash: string;
+  properties: {
+    width: number;
+    height: number;
+  };
+  url: string;
+  thumbnailUrl: string;
+  comment?: unknown;
+  folderId?: unknown;
+  folder?: unknown;
+  userId?: unknown;
+  user?: unknown;
+}
+export interface MisskeyAPINoteShowPoll {
+  multiple: boolean;
+  expiresAt: string;
+  choices: {
+    text: string;
+    votes: number;
+    isVoted: boolean;
+  }[];
+}
+export interface MisskeyAPINoteShow {
+  id: string;
+  createdAt: string;
+  userId: string;
+  user: {
+    id: string;
+    name: string;
+    username: string;
+    host?: string;
+    avatarUrl: string;
+    avatarBlurhash: string;
+    isBot: boolean;
+    isCat: boolean;
+    emojis: Record<string, number>;
+    onlineStatus: string;
+    badgeRoles: {
+      name: string;
+      iconUrl: string;
+      displayOrder: number;
+    }[];
+  };
+  text: string;
+  cw?: unknown;
+  visibility: string;
+  localOnly: boolean;
+  reactionAcceptance?: unknown;
+  renoteCount: number;
+  repliesCount: number;
+  reactions: Record<string, number>;
+  reactionEmojis: Record<string, number>;
+  fileIds: string[];
+  files?: MisskeyAPINoteShowFile[];
+  replyId?: unknown;
+  renoteId?: unknown;
+  poll?: MisskeyAPINoteShowPoll;
+  renote?: MisskeyAPINoteShow;
 }

@@ -17,10 +17,14 @@ const ENV = {
   ...process.env,
   ...ENV_JSON,
 };
-export const DISCORD_BOT_TOKEN = ENV.DISCORD_BOT_TOKEN;
+export const DISCORD_BOT_TOKEN = ENV.DISCORD_BOT_TOKEN ?? "";
 export const NO_REPLY_USERS_ID = (ENV.NO_REPLY_USERS_ID_COMMA ?? "").split(
   /,/g
 );
+export const MISSKEY_API_TOKENS = {
+  io: ENV.MISSKEY_IO_API_TOKEN ?? "",
+  gamelore: ENV.MISSKEY_GAMELORE_API_TOKEN ?? "",
+};
 
 export const PLAYING_ON = "はど開発室";
 export const PREFIX = "alxo?";
