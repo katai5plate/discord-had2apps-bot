@@ -1,7 +1,7 @@
 //@ts-check
 import fs from "fs/promises";
 import { DB_PATH } from "./constants.js";
-/** @typedef {import("./type.d.ts").DatabaseJSON} DatabaseJSON */
+/** @typedef {import("./type").DatabaseJSON} DatabaseJSON */
 
 /** @type {DatabaseJSON} */
 let cache = { messages: [] };

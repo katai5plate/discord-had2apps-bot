@@ -1,6 +1,6 @@
 //@ts-check
 import { PREFIX } from "../constants.js";
-/** @typedef {import("../type.d.ts").ChatFunction} ChatFunction */
+/** @typedef {import("../type").ChatFunction} ChatFunction */
 
 /** @type {ChatFunction} */
 export default async ({ message }) => {

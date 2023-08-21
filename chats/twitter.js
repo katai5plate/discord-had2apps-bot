@@ -7,9 +7,9 @@ import {
   TWT_REGEX,
 } from "../constants.js";
 import { textToUrls, useMessage, useTweet } from "../utils.js";
-/** @typedef {import("../type.d.ts").FixTweetAPIMedia} FixTweetAPIMedia */
-/** @typedef {import("../type.d.ts").FixTweetAPITweet} FixTweetAPITweet */
-/** @typedef {import("../type.d.ts").ChatFunction} ChatFunction */
+/** @typedef {import("../type").FixTweetAPIMedia} FixTweetAPIMedia */
+/** @typedef {import("../type").FixTweetAPITweet} FixTweetAPITweet */
+/** @typedef {import("../type").ChatFunction} ChatFunction */
 
 /** @type {ChatFunction} */
 export default async ({ message }) => {

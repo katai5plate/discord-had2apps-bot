@@ -1,7 +1,7 @@
 //@ts-check
 import { DEL_REGEX, POSTED_REGEX } from "../constants.js";
 import { tryit, useMessage } from "../utils.js";
-/** @typedef {import("../type.d.ts").ChatFunction} ChatFunction */
+/** @typedef {import("../type").ChatFunction} ChatFunction */
 
 /** @type {ChatFunction} */
 export default async ({ message }) => {

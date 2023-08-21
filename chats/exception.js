@@ -1,6 +1,6 @@
 //@ts-check
 import { useMessage } from "../utils.js";
-/** @typedef {import("../type.js").ChatFunction} ChatFunction */
+/** @typedef {import("../type").ChatFunction} ChatFunction */
 
 /** @type {ChatFunction} */
 export default async ({ message, error }) => {

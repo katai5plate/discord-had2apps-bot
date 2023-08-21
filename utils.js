@@ -8,9 +8,9 @@ import {
   TWT_DOMAIN_RAGEX,
   URl_REGEX,
 } from "./constants.js";
-/** @typedef {import("./type.d.ts").Message} Message */
-/** @typedef {import("./type.d.ts").FixTweetAPI} FixTweetAPI */
-/** @typedef {import("./type.d.ts").FixTweetAPITweet} FixTweetAPITweet */
+/** @typedef {import("./type").Message} Message */
+/** @typedef {import("./type").FixTweetAPI} FixTweetAPI */
+/** @typedef {import("./type").FixTweetAPITweet} FixTweetAPITweet */
 
 /** @param {string[]} arr */
 export const shuffleWord = (arr) => {

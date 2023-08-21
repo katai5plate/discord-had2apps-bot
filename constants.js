@@ -1,6 +1,6 @@
 //@ts-check
 import fs from "fs";
-/** @typedef {import("./type.d.ts").EnvJSON} EnvJSON */
+/** @typedef {import("./type").EnvJSON} EnvJSON */
 
 export const DB_PATH = "./db.json";
 
@@ -64,3 +64,14 @@ export const NO_COMMENT = "・・・。";
 
 export const TWEET_IS_ERROR = Symbol("TWEET_IS_ERROR");
 export const TWEET_IS_NSFW = Symbol("TWEET_IS_NSFW");
+
+export const MISSKEY_HOSTS = [
+  {
+    host: "misskey.io",
+    token: MISSKEY_API_TOKENS.io,
+  },
+  {
+    host: "misskey.gamelore.fun",
+    token: MISSKEY_API_TOKENS.gamelore,
+  },
+];

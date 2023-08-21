@@ -1,6 +1,6 @@
 //@ts-check
 import axios from "axios";
-import { MISSKEY_API_TOKENS } from "../constants.js";
+import { MISSKEY_HOSTS } from "../constants.js";
 import { tryit, useMessage } from "../utils.js";
 /** @typedef {import("../type").ChatFunction} ChatFunction */
 /** @typedef {import("../type").MisskeyAPINoteShow} MisskeyAPINoteShow */
@@ -8,16 +8,7 @@ import { tryit, useMessage } from "../utils.js";
 /** @type {ChatFunction} */
 export default async ({ message }) => {
   const { post } = useMessage(message);
-  for (const { host, token } of [
-    {
-      host: "misskey.io",
-      token: MISSKEY_API_TOKENS.io,
-    },
-    {
-      host: "misskey.gamelore.fun",
-      token: MISSKEY_API_TOKENS.gamelore,
-    },
-  ]) {
+  for (const { host, token } of MISSKEY_HOSTS) {
     const regex = new RegExp(
       `${host.replace(/\./g, "\\.")}\\/notes\\/([0-9a-z]+)`
     );
