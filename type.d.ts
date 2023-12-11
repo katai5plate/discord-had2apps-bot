@@ -38,6 +38,7 @@ interface FixTweetAPIPhoto {
   url: string;
   width: number;
   height: number;
+  altText?: string;
 }
 interface FixTweetAPIVideo {
   type: "video" | "gif";
