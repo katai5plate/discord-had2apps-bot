@@ -2,6 +2,7 @@
 import {
   HMM_REGEX,
   IRUKA_REGEX,
+  MNAT_REGEX,
   MUR_REGEX,
   NO_COMMENT,
   UHOS,
@@ -76,4 +77,8 @@ export default async ({ message }) => {
         "🐬 ＜ 俺がお前を消してやってもいいんだぜ",
       ])
     );
+
+  // 胸が熱くなる
+  if (MNAT_REGEX.test(message.content))
+    return await reply(shuffleWord(["これは胸熱！", "胸熱！", "胸熱"]));
 };
