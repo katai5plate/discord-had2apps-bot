@@ -1,10 +1,8 @@
-//@ts-check
-import { DEL_REGEX, POSTED_REGEX } from "../constants.js";
-import { tryit, useMessage } from "../utils.js";
-/** @typedef {import("../type").ChatFunction} ChatFunction */
+import { DEL_REGEX, POSTED_REGEX } from "../constants";
+import { ChatFunction } from "../types";
+import { tryit, useMessage } from "../utils";
 
-/** @type {ChatFunction} */
-export default async ({ message }) => {
+const chat: ChatFunction = async ({ message }) => {
   const { reply } = useMessage(message);
 
   if (DEL_REGEX.test(message.content)) {
@@ -32,3 +30,5 @@ export default async ({ message }) => {
     if (botMes?.content.match(POSTED_REGEX)) return await reply("自演やめろ");
   }
 };
+
+export default chat;

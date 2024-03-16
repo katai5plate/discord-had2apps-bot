@@ -1,18 +1,13 @@
-//@ts-check
-import axios from "axios";
 import {
   TWEET_IS_ERROR,
   TWEET_IS_NSFW,
   TWT_DOMAIN_RAGEX,
   TWT_REGEX,
-} from "../constants.js";
-import { textToUrls, useMessage, useTweet } from "../utils.js";
-/** @typedef {import("../type").FixTweetAPIMedia} FixTweetAPIMedia */
-/** @typedef {import("../type").FixTweetAPITweet} FixTweetAPITweet */
-/** @typedef {import("../type").ChatFunction} ChatFunction */
+} from "../constants";
+import { textToUrls, useMessage, useTweet } from "../utils";
+import { ChatFunction, FixTweetAPIMedia, FixTweetAPITweet } from "../types";
 
-/** @type {ChatFunction} */
-export default async ({ message }) => {
+const chat: ChatFunction = async ({ message }) => {
   const { post } = useMessage(message);
 
   if (TWT_REGEX.test(message.content)) {
@@ -32,20 +27,16 @@ export default async ({ message }) => {
       return await nsfwPost.react("🔞");
     }
 
-    /** @type {string[]} */
-    const texts = [tweet.text];
-    /** @type {string[]} */
-    const previews = [];
+    const texts: string[] = [tweet.text];
+    const previews: string[] = [];
     const { poll, quote, views } = tweet;
     const { all, mosaic } = tweet.media ?? {};
 
-    /** @param {FixTweetAPITweet["author"]} author */
-    const getAuthor = (author) => `> ${author.name} (@${author.screen_name})`;
+    const getAuthor = (author: FixTweetAPITweet["author"]) =>
+      `> ${author.name} (@${author.screen_name})`;
 
-    /** @param {FixTweetAPIMedia["all"]} all */
-    const getPreviews = (all) => {
-      /** @type {string[]} */
-      const results = [];
+    const getPreviews = (all: FixTweetAPIMedia["all"]) => {
+      const results: string[] = [];
       if (all) {
         // メディアは１つ以下
         if (all.length <= 1) {
@@ -136,3 +127,5 @@ export default async ({ message }) => {
     await message.delete();
   }
 };
+
+export default chat;

@@ -1,14 +1,11 @@
-//@ts-check
 import axios from "axios";
-import { MISSKEY_HOSTS } from "../constants.js";
-import { tryit, useMessage } from "../utils.js";
-/** @typedef {import("../type").ChatFunction} ChatFunction */
-/** @typedef {import("../type").MisskeyAPINoteShow} MisskeyAPINoteShow */
+import { MISSKEY_HOSTS } from "../constants";
+import { tryit, useMessage } from "../utils";
+import { ChatFunction, MisskeyAPINoteShow } from "../types";
 
-/** @type {ChatFunction} */
-export default async ({ message }) => {
+const chat: ChatFunction = async ({ message }) => {
   const { post } = useMessage(message);
-  for (const { host, token } of MISSKEY_HOSTS) {
+  for (const { host, token: i } of MISSKEY_HOSTS) {
     const regex = new RegExp(
       `${host.replace(/\./g, "\\.")}\\/notes\\/([0-9a-z]+)`
     );
@@ -17,23 +14,20 @@ export default async ({ message }) => {
       const res = await tryit(() =>
         axios.post(`https://${host}/api/notes/show`, {
           noteId,
-          i: token,
+          i,
         })
       );
       if (!res) return message.react("❌");
 
-      /** @type {MisskeyAPINoteShow} */
-      const note = res.data;
+      const note: MisskeyAPINoteShow = res.data;
 
-      /** @type {string[]} */
-      const texts = [note.text];
-      /** @type {string[]} */
-      const previews = [];
+      const texts: string[] = [note.text];
+      const previews: string[] = [];
 
-      let isNSFW;
+      let isNSFW: boolean = false;
 
-      /** @param {MisskeyAPINoteShow["user"]} user */
-      const getUser = (user) => `> ${user.name} (@${user.username})`;
+      const getUser = (user: MisskeyAPINoteShow["user"]) =>
+        `> ${user.name} (@${user.username})`;
 
       // 投票がある
       if (note.poll) {
@@ -102,3 +96,5 @@ export default async ({ message }) => {
     }
   }
 };
+
+export default chat;

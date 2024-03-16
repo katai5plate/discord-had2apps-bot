@@ -1,11 +1,9 @@
-//@ts-check
 import fs from "fs";
-/** @typedef {import("./type").EnvJSON} EnvJSON */
+import { EnvJSON } from "./types";
 
 export const DB_PATH = "./db.json";
 
-/** @type {Partial<EnvJSON>} */
-const ENV_JSON = (() => {
+const ENV_JSON: Partial<EnvJSON> = (() => {
   try {
     return JSON.parse(fs.readFileSync("./env.json", { encoding: "utf8" }));
   } catch {

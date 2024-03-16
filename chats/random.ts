@@ -1,4 +1,3 @@
-//@ts-check
 import {
   HMM_REGEX,
   IRUKA_REGEX,
@@ -7,12 +6,11 @@ import {
   NO_COMMENT,
   UHOS,
   UHO_REGEX,
-} from "../constants.js";
-import { shuffleWord, useMessage } from "../utils.js";
-/** @typedef {import("../type").ChatFunction} ChatFunction */
+} from "../constants";
+import { ChatFunction } from "../types";
+import { shuffleWord, useMessage } from "../utils";
 
-/** @type {ChatFunction} */
-export default async ({ message }) => {
+const chat: ChatFunction = async ({ message }) => {
   const { reply, instantPost } = useMessage(message);
 
   // 便乗
@@ -82,3 +80,5 @@ export default async ({ message }) => {
   if (MNAT_REGEX.test(message.content))
     return await reply(shuffleWord(["これは胸熱！", "胸熱！", "胸熱"]));
 };
+
+export default chat;

@@ -1,26 +1,20 @@
-//@ts-check
 import express from "express";
-import discord from "discord.js";
-import * as db from "./db.js";
-import {
-  DISCORD_BOT_TOKEN,
-  NO_REPLY_USERS_ID,
-  PLAYING_ON,
-} from "./constants.js";
-import maou from "./chats/maou.js";
-import random from "./chats/random.js";
-import twitter from "./chats/twitter.js";
-import remove from "./chats/remove.js";
-import prefix from "./chats/prefix.js";
-import exception from "./chats/exception.js";
-import misskey from "./chats/misskey.js";
-/** @typedef {import("./type.d.ts").Connect} Connect */
+import discord, { GatewayIntentBits, Partials } from "discord.js";
+import * as db from "./db";
+import { DISCORD_BOT_TOKEN, NO_REPLY_USERS_ID, PLAYING_ON } from "./constants";
+import maou from "./chats/maou";
+import random from "./chats/random";
+import twitter from "./chats/twitter";
+import remove from "./chats/remove";
+import prefix from "./chats/prefix";
+import exception from "./chats/exception";
+import misskey from "./chats/misskey";
+import { Connect } from "./types";
 
 const app = express();
 const client = new discord.Client({
-  //@ts-ignore
-  partials: Object.values(discord.Partials), //@ts-ignore
-  intents: Object.values(discord.IntentsBitField.Flags),
+  partials: Object.values(discord.Partials) as Partials[],
+  intents: Object.values(discord.IntentsBitField.Flags) as GatewayIntentBits[],
 });
 
 try {
@@ -41,8 +35,7 @@ try {
   client.on("messageCreate", async (message) => {
     if (message.author.id === client.user?.id || message.author.bot) return;
 
-    /** @type {Connect} */
-    const connect = { message, client };
+    const connect: Connect = { message, client };
 
     try {
       // メンション時のメッセージ
@@ -60,8 +53,8 @@ try {
       await remove(connect);
       // プレフィックスコマンド
       await prefix(connect);
-    } catch (error) {
-      await exception({ ...connect, error });
+    } catch (e) {
+      await exception({ ...connect, error: e as Error });
     }
 
     // ログ集計

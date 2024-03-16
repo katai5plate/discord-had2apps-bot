@@ -1,9 +1,7 @@
-//@ts-check
-import { PREFIX } from "../constants.js";
-/** @typedef {import("../type").ChatFunction} ChatFunction */
+import { PREFIX } from "../constants";
+import { ChatFunction } from "../types";
 
-/** @type {ChatFunction} */
-export default async ({ message }) => {
+const chat: ChatFunction = async ({ message }) => {
   if (message.content.startsWith(PREFIX)) {
     const args = message.content.slice(PREFIX.length).trim().split(/ +/g);
     const command = args.shift()?.toLowerCase();
@@ -27,3 +25,5 @@ export default async ({ message }) => {
     }
   }
 };
+
+export default chat;
