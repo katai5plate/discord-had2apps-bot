@@ -8,7 +8,6 @@ import twitter from "./chats/twitter";
 import remove from "./chats/remove";
 import prefix from "./chats/prefix";
 import exception from "./chats/exception";
-import misskey from "./chats/misskey";
 import { Connect } from "./types";
 
 const app = express();
@@ -48,7 +47,6 @@ try {
       }
       // 全ユーザー向け
       await twitter(connect);
-      await misskey(connect);
       // 指示者と同じ人限定で bot の発言を消せる機能
       await remove(connect);
       // プレフィックスコマンド

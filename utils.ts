@@ -25,8 +25,10 @@ export const shuffleWord = (arr: string[]) => {
 
 export const useMessage = (messageObj: Message) => {
   const reply = async (mes: string) => messageObj.reply(mes || NO_COMMENT);
-  const post = async (mes: string) =>
-    messageObj.channel.send(mes || NO_COMMENT);
+  const post = async (mes: string | string[]) =>
+    messageObj.channel.send(
+      typeof mes === "string" ? mes : mes.join("\n") || NO_COMMENT
+    );
   const instantPost = async (mes: string, replies: string[]) =>
     messageObj.content === mes && (await reply(shuffleWord(replies)));
   return { reply, post, instantPost };

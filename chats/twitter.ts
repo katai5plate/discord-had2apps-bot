@@ -5,7 +5,8 @@ import {
   TWT_REGEX,
 } from "../constants";
 import { textToUrls, useMessage, useTweet } from "../utils";
-import { ChatFunction, FixTweetAPIMedia, FixTweetAPITweet } from "../types";
+import { ChatFunction, FixTweetAPIMedia } from "../types";
+import { offLink, codeBlock, postedBy, tweetStatus, snsUser } from "../snippet";
 
 const chat: ChatFunction = async ({ message }) => {
   const { post } = useMessage(message);
@@ -17,7 +18,7 @@ const chat: ChatFunction = async ({ message }) => {
     if (tweet === TWEET_IS_NSFW) {
       const nsfwPost = await post(
         [
-          `[POSTED BY <@${message.author.id}>]`,
+          postedBy(message.author),
           message.content
             .replace(TWT_DOMAIN_RAGEX, "twitter.com")
             .replace(/\?.+$/, ""),
@@ -29,11 +30,8 @@ const chat: ChatFunction = async ({ message }) => {
 
     const texts: string[] = [tweet.text];
     const previews: string[] = [];
-    const { poll, quote, views } = tweet;
+    const { poll, quote } = tweet;
     const { all, mosaic } = tweet.media ?? {};
-
-    const getAuthor = (author: FixTweetAPITweet["author"]) =>
-      `> ${author.name} (@${author.screen_name})`;
 
     const getPreviews = (all: FixTweetAPIMedia["all"]) => {
       const results: string[] = [];
@@ -88,7 +86,7 @@ const chat: ChatFunction = async ({ message }) => {
     // 引用がある
     if (quote) {
       const lines = quote.text.split(/\n/g);
-      texts.push(`| ${getAuthor(quote.author)}`);
+      texts.push(`| ${snsUser(quote.author.name, quote.author.screen_name)}`);
       for (const i in lines) {
         const text = lines[i];
         texts.push(`| ${text}`);
@@ -111,19 +109,15 @@ const chat: ChatFunction = async ({ message }) => {
       }
     }
 
-    await post(
-      [
-        `[POSTED BY <@${message.author.id}>]`,
-        `<${tweet.url}> \`\`\``,
-        getAuthor(tweet.author),
+    await post([
+      postedBy(message.author),
+      `${offLink(tweet.url)} ${codeBlock([
+        snsUser(tweet.author.name, tweet.author.screen_name),
         ...texts,
-        `${tweet.replies} 💬 \t ${tweet.retweets} 🔁 \t ${tweet.likes} 💖 \t ${
-          views ? `${views} 👁️` : ""
-        }`,
-        `\`\`\``,
-        ...previews,
-      ].join("\n")
-    );
+        tweetStatus(tweet),
+      ])}`,
+      ...previews,
+    ]);
     await message.delete();
   }
 };
