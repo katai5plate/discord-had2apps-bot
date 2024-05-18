@@ -1,10 +1,10 @@
 import {
   HMM_REGEX,
   IRUKA_REGEX,
-  MNAT_REGEX,
-  MUR_REGEX,
+  MUNEATSU_REGEX,
+  MIURA_REGEX,
   NO_COMMENT,
-  UHOS,
+  UHO_PALLETE,
   UHO_REGEX,
 } from "../constants";
 import { ChatFunction } from "../types";
@@ -14,7 +14,7 @@ const chat: ChatFunction = async ({ message }) => {
   const { reply, instantPost } = useMessage(message);
 
   // 便乗
-  if (MUR_REGEX.test(message.content.split(/\n/g).at(-1) ?? "")) {
+  if (MIURA_REGEX.test(message.content.split(/\n/g).at(-1) ?? "")) {
     await reply(
       shuffleWord([
         "そうだよ（便乗）",
@@ -61,7 +61,7 @@ const chat: ChatFunction = async ({ message }) => {
     await reply(
       Array.from(
         { length: (Math.random() * 10) | 0 },
-        () => UHOS[Math.floor(Math.random() * UHOS.length)]
+        () => UHO_PALLETE[Math.floor(Math.random() * UHO_PALLETE.length)]
       ).join("") || NO_COMMENT
     );
   }
@@ -77,7 +77,7 @@ const chat: ChatFunction = async ({ message }) => {
     );
 
   // 胸が熱くなる
-  if (MNAT_REGEX.test(message.content))
+  if (MUNEATSU_REGEX.test(message.content))
     return await reply(shuffleWord(["これは胸熱！", "胸熱！", "胸熱"]));
 };
 

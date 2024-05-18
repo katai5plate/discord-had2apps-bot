@@ -4,8 +4,10 @@ import {
   NO_COMMENT,
   TWEET_IS_ERROR,
   TWEET_IS_NSFW,
-  TWT_DOMAIN_RAGEX,
-  URl_REGEX,
+  TWEET_IS_PROFILE,
+  TWEET_IS_TWEET,
+  TWITTER_DOMAIN_RAGEX,
+  URL_REGEX,
 } from "./constants";
 import { FixTweetAPI, FixTweetAPITweet, Message } from "./types";
 
@@ -36,12 +38,17 @@ export const useMessage = (messageObj: Message) => {
 
 export const useTweet = async (
   url: string
-): Promise<FixTweetAPITweet | typeof TWEET_IS_ERROR | typeof TWEET_IS_NSFW> => {
+): Promise<
+  | [typeof TWEET_IS_ERROR]
+  | [typeof TWEET_IS_NSFW]
+  | [typeof TWEET_IS_PROFILE, Exclude<FixTweetAPI["user"], undefined>]
+  | [typeof TWEET_IS_TWEET, Exclude<FixTweetAPI["tweet"], undefined>]
+> => {
   const res: FixTweetAPI | typeof TWEET_IS_ERROR | typeof TWEET_IS_NSFW =
     await (async () => {
       try {
         return await axios
-          .get(url.replace(TWT_DOMAIN_RAGEX, "api.fxtwitter.com"))
+          .get(url.replace(TWITTER_DOMAIN_RAGEX, "api.fxtwitter.com"))
           .then(({ data }) => data);
       } catch (error) {
         // なぜかこれでないと取れない
@@ -50,10 +57,12 @@ export const useTweet = async (
         return TWEET_IS_ERROR;
       }
     })();
-  if (!res) return TWEET_IS_ERROR;
-  if (res === TWEET_IS_ERROR) return TWEET_IS_ERROR;
-  if (res === TWEET_IS_NSFW) return TWEET_IS_NSFW;
-  return res?.tweet ?? TWEET_IS_ERROR;
+  if (!res) return [TWEET_IS_ERROR];
+  if (res === TWEET_IS_ERROR) return [TWEET_IS_ERROR];
+  if (res === TWEET_IS_NSFW) return [TWEET_IS_NSFW];
+  if (!res?.tweet && res?.user) return [TWEET_IS_PROFILE, res.user];
+  if (res?.tweet && !res?.user) return [TWEET_IS_TWEET, res.tweet];
+  return [TWEET_IS_ERROR];
 };
 
 export const tryit = async <T>(
@@ -69,7 +78,7 @@ export const tryit = async <T>(
 };
 
 export const textToUrls = (text: string): string[] =>
-  Array.from(text.matchAll(new RegExp(URl_REGEX, "g")), (match) => match[0]);
+  Array.from(text.matchAll(new RegExp(URL_REGEX, "g")), (match) => match[0]);
 
 export const exportLog = (name: string, obj: object) =>
   fs.writeFileSync(`${name}.log`, JSON.stringify(obj, null, 2));

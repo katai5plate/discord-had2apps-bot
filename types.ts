@@ -105,10 +105,28 @@ export interface FixTweetAPITweet {
   };
   media?: FixTweetAPIMedia;
 }
+export interface FixTweetAPIUser {
+  url: string;
+  id: string;
+  followers: number;
+  following: number;
+  likes: number;
+  tweets: number;
+  name: string;
+  screen_name: string;
+  description: string;
+  location: string;
+  banner_url: string;
+  avatar_url: string;
+  joined: string;
+  birthday?: { day: number; month: number };
+  website?: { url: string; display_url: string };
+}
 export interface FixTweetAPI {
   code: 200 | 401 | 404 | 500;
   message: "OK" | "PRIVATE_TWEET" | "NOT_FOUND" | "API_FAIL";
   tweet?: FixTweetAPITweet;
+  user?: FixTweetAPIUser;
 }
 
 export interface MisskeyAPINoteShowFile {

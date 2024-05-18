@@ -11,4 +11,9 @@ export const tweetStatus = (tweet: FixTweetAPITweet) =>
   `${tweet.replies} 💬 \t ${tweet.retweets} 🔁 \t ${tweet.likes} 💖 \t ${
     tweet.views ? `${tweet.views} 👁️` : ""
   }`;
-export const snsUser = (name: string, id: string) => `> ${name} (@${id})`;
+export const snsUser = (name: string, id: string, note?: string) =>
+  `> ${name} (@${id}${!note ? "" : `, ${note}`})`;
+export const link = (name: string, href: string, noPreview = false) =>
+  `[${name}](${noPreview ? offLink(href) : href})`;
+export const code = (content: string) => "`" + content + "`";
+export const bold = (content: string) => "**" + content + "**";

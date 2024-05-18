@@ -1,11 +1,11 @@
-import { DEL_REGEX, POSTED_REGEX } from "../constants";
+import { DELETE_REGEX, POSTED_REGEX } from "../constants";
 import { ChatFunction } from "../types";
 import { tryit, useMessage } from "../utils";
 
 const chat: ChatFunction = async ({ message }) => {
   const { reply } = useMessage(message);
 
-  if (DEL_REGEX.test(message.content)) {
+  if (DELETE_REGEX.test(message.content)) {
     const botMes = await tryit(() =>
       message.channel.messages.fetch(message.reference?.messageId ?? "")
     );
