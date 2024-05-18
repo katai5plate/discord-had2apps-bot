@@ -53,6 +53,22 @@ const chat: ChatFunction = async ({ message }) => {
     "アッーーー！",
     `うほっ、いい<@${message.author.id}>・・・`,
   ]);
+  [
+    "やるぞ！",
+    "やるか！",
+    "頑張るぞ",
+    "頑張るぞ！",
+    "やってやる！",
+    "やってやるぞ",
+  ].forEach((mes) =>
+    instantPost(mes, [
+      "やったれ！",
+      "やろうぜ！",
+      "やろう！",
+      "やれ！",
+      "お前ならできる！",
+    ])
+  );
 
   // ゴリラ語
   if (message.content === "ウホッ") {
