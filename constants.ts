@@ -23,6 +23,7 @@ export const MISSKEY_API_TOKENS = {
   io: ENV.MISSKEY_IO_API_TOKEN ?? "",
   gamelore: ENV.MISSKEY_GAMELORE_API_TOKEN ?? "",
 };
+export const EXPAND_BOT_USER_ID = ENV.EXPAND_BOT_USER_ID;
 
 export const PLAYING_ON = "はど開発室";
 export const PREFIX = "alxo?";

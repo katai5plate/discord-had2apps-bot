@@ -6,6 +6,7 @@ export interface EnvJSON {
   // IGNORE_ANALYZE_CHANNEL_ID_COMMA: string;
   MISSKEY_IO_API_TOKEN: string;
   MISSKEY_GAMELORE_API_TOKEN: string;
+  EXPAND_BOT_USER_ID: string;
 }
 
 export interface DatabaseJSON {
