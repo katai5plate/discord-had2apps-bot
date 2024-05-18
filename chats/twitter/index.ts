@@ -66,10 +66,11 @@ const chat: ChatFunction = async ({ message }) => {
             ? link(tweet.website.display_url, tweet.website.url)
             : "なし"
         }`,
-        [link("サムネ", tweet.avatar_url), link("背景", tweet.banner_url)].join(
-          " "
-        ),
-        ...(urls ? ["リンク：", ...urls] : []),
+        [
+          tweet.avatar_url ? link("サムネ", tweet.avatar_url) : "",
+          tweet.banner_url ? link("背景", tweet.banner_url) : "",
+        ].join(" "),
+        ...(urls.length ? ["リンク：", ...urls] : []),
       ]);
       await message.delete();
       return;

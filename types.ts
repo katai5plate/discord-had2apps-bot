@@ -116,8 +116,8 @@ export interface FixTweetAPIUser {
   screen_name: string;
   description: string;
   location: string;
-  banner_url: string;
-  avatar_url: string;
+  banner_url?: string;
+  avatar_url?: string;
   joined: string;
   birthday?: { day: number; month: number };
   website?: { url: string; display_url: string };
