@@ -1,7 +1,12 @@
 import express from "express";
 import discord, { GatewayIntentBits, Partials } from "discord.js";
 import * as db from "./db";
-import { DISCORD_BOT_TOKEN, NO_REPLY_USERS_ID, PLAYING_ON } from "./constants";
+import {
+  DISCORD_BOT_TOKEN,
+  GUILD_ID,
+  NO_REPLY_USERS_ID,
+  PLAYING_ON,
+} from "./constants";
 import maou from "./chats/maou";
 import random from "./chats/random";
 import twitter from "./chats/twitter";
@@ -34,7 +39,11 @@ try {
   client.on("messageCreate", async (message) => {
     if (message.author.id === client.user?.id || message.author.bot) return;
 
-    const connect: Connect = { message, client };
+    const connect: Connect = {
+      message,
+      client,
+      guild: client.guilds.cache.get(GUILD_ID) as discord.Guild,
+    };
 
     try {
       // メンション時のメッセージ

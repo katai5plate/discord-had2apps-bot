@@ -1,6 +1,7 @@
 import discord from "discord.js";
 
 export interface EnvJSON {
+  GUILD_ID: string;
   DISCORD_BOT_TOKEN: string;
   NO_REPLY_USERS_ID_COMMA: string;
   // IGNORE_ANALYZE_CHANNEL_ID_COMMA: string;
@@ -23,6 +24,7 @@ export type Message = discord.Message<boolean>;
 export interface Connect {
   message: Message;
   client: discord.Client<boolean>;
+  guild: discord.Guild;
   error?: Error | TypeError;
 }
 export type ChatFunction = (connect: Connect) => Promise<any>;

@@ -15,6 +15,7 @@ const ENV = {
   ...process.env,
   ...ENV_JSON,
 };
+export const GUILD_ID = ENV.GUILD_ID ?? "";
 export const DISCORD_BOT_TOKEN = ENV.DISCORD_BOT_TOKEN ?? "";
 export const NO_REPLY_USERS_ID = (ENV.NO_REPLY_USERS_ID_COMMA ?? "").split(
   /,/g
@@ -26,7 +27,7 @@ export const MISSKEY_API_TOKENS = {
 export const EXPAND_BOT_USER_ID = ENV.EXPAND_BOT_USER_ID;
 
 export const PLAYING_ON = "はど開発室";
-export const PREFIX = "alxo?";
+export const PREFIX = "alexo?";
 
 export const MAOU_REGEX = /魔王$/;
 export const MIURA_REGEX =

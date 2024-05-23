@@ -1,5 +1,6 @@
 env.json
 db.json
+*.ignore.*
 
 # Logs
 logs
