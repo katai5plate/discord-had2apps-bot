@@ -47,9 +47,13 @@ export const useTweet = async (
   const res: FixTweetAPI | typeof TWEET_IS_ERROR | typeof TWEET_IS_NSFW =
     await (async () => {
       try {
-        const res = await fetch(
-          url.replace(TWITTER_DOMAIN_RAGEX, "api.fxtwitter.com") + "/jp",
-        );
+        const u = new URL(url);
+        const apiUrl =
+          `https://${u.host}${u.pathname}`.replace(
+            TWITTER_DOMAIN_RAGEX,
+            "api.fxtwitter.com",
+          ) + "/jp";
+        const res = await fetch(apiUrl);
         if (res.status === 500) return TWEET_IS_NSFW;
         if (!res.ok) return TWEET_IS_ERROR;
         return await res.json();
