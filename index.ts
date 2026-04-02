@@ -16,7 +16,7 @@ import {
   PLAYING_ON,
   PRIVATE_VALUES_LOCATION,
 } from "./constants";
-import * as db from "./db";
+// import * as db from "./db";
 import { Connect, PrivateValues } from "./types";
 import { getFromMessageUri } from "./utils";
 
@@ -45,7 +45,7 @@ try {
     client.user?.setActivity(PLAYING_ON, {
       type: discord.ActivityType.Playing,
     });
-    db.init();
+    // db.init();
 
     if (PRIVATE_VALUES_LOCATION) {
       const { message } = await getFromMessageUri(
@@ -109,21 +109,21 @@ try {
       await exception({ ...connect, error: e as Error }, privateValues);
     }
 
-    // ログ集計
-    await db.write(
-      "messages",
-      (mes) => [
-        ...mes,
-        {
-          guildId: message.guild?.id,
-          channelId: message.channel.id,
-          authorId: message.author.id,
-          createdAt: message.createdAt,
-          size: message.content.length,
-        },
-      ],
-      [],
-    );
+    // // ログ集計
+    // await db.write(
+    //   "messages",
+    //   (mes) => [
+    //     ...mes,
+    //     {
+    //       guildId: message.guild?.id,
+    //       channelId: message.channel.id,
+    //       authorId: message.author.id,
+    //       createdAt: message.createdAt,
+    //       size: message.content.length,
+    //     },
+    //   ],
+    //   [],
+    // );
   });
 
   client.login(DISCORD_BOT_TOKEN);
