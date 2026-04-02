@@ -9,7 +9,7 @@ import {
   TWITTER_DOMAIN_RAGEX,
   URL_REGEX,
 } from "./constants";
-import { FixTweetAPI, FixTweetAPITweet, Message } from "./types";
+import { FixTweetAPI, Message } from "./types";
 
 export const shuffleWord = (arr: string[]) => {
   let cumulativeWeight = 0;
@@ -29,7 +29,7 @@ export const useMessage = (messageObj: Message) => {
   const reply = async (mes: string) => messageObj.reply(mes || NO_COMMENT);
   const post = async (mes: string | string[]) =>
     messageObj.channel.send(
-      typeof mes === "string" ? mes : mes.join("\n") || NO_COMMENT
+      typeof mes === "string" ? mes : mes.join("\n") || NO_COMMENT,
     );
   const instantPost = async (mes: string, replies: string[]) =>
     messageObj.content === mes && (await reply(shuffleWord(replies)));
@@ -37,7 +37,7 @@ export const useMessage = (messageObj: Message) => {
 };
 
 export const useTweet = async (
-  url: string
+  url: string,
 ): Promise<
   | [typeof TWEET_IS_ERROR]
   | [typeof TWEET_IS_NSFW]
@@ -48,7 +48,7 @@ export const useTweet = async (
     await (async () => {
       try {
         return await axios
-          .get(url.replace(TWITTER_DOMAIN_RAGEX, "api.fxtwitter.com"))
+          .get(url.replace(TWITTER_DOMAIN_RAGEX, "api.fxtwitter.com") + "/jp")
           .then(({ data }) => data);
       } catch (error) {
         // なぜかこれでないと取れない
@@ -67,7 +67,7 @@ export const useTweet = async (
 
 export const tryit = async <T>(
   fn: () => Promise<T>,
-  err: (e: any) => void = () => {}
+  err: (e: any) => void = () => {},
 ): Promise<T | null> => {
   try {
     return await fn();

@@ -77,7 +77,11 @@ const chat: ChatFunction = async ({ message }) => {
     }
 
     if (tweetType === TWEET_IS_TWEET) {
-      let mainTexts: string[] = [tweet.text];
+      let mainTexts: string[] = [
+        tweet.translation?.provider === "grok"
+          ? tweet.translation.text
+          : tweet.text,
+      ];
       let mediaPreviewTexts: string[] = [];
       const { poll, quote } = tweet;
 
