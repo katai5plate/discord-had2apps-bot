@@ -9,6 +9,8 @@ import {
 } from "../constants";
 import { ChatFunction } from "../types";
 import { shuffleWord, useMessage } from "../utils";
+import text2png from "text2png";
+import { AttachmentBuilder } from "discord.js";
 
 const chat: ChatFunction = async ({ message }) => {
   const { reply, instantPost } = useMessage(message);
@@ -40,6 +42,33 @@ const chat: ChatFunction = async ({ message }) => {
         "ほう？",
       ]),
     );
+  }
+
+  // text2png テスト
+  if (message.content === "てすと１") {
+    const longText = [
+      "吾輩は猫である。名前はまだ無い。",
+      "どこで生れたかとんと見当がつかぬ。",
+      "何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。",
+      "吾輩はここで始めて人間というものを見た。",
+      "しかもあとで聞くとそれは書生という人間中で一番獰悪な種族であったそうだ。",
+      "この書生というのは時々我々を捕えて煮て食うという話である。",
+      "しかし当時は何という考もなかったから別段恐しいとも思わなかった。",
+      "ただ彼の掌に載せられてスーと持ち上げられた時何だかフワフワした感じがあったばかりである。",
+    ]
+      .join("\n")
+      .repeat(10);
+    const buf = text2png(longText, {
+      font: "24px sans-serif",
+      color: "white",
+      bgColor: "#2b2d31",
+      padding: 16,
+      lineSpacing: 8,
+    });
+    await message.channel.send({
+      files: [new AttachmentBuilder(buf, { name: "test.png" })],
+    });
+    return;
   }
 
   // 単発系

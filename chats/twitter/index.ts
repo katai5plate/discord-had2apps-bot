@@ -20,6 +20,8 @@ import {
 } from "../../snippet";
 import { pollTexts } from "./pollTexts";
 import { mediaTexts } from "./mediaTexts";
+import text2png from "text2png";
+import { AttachmentBuilder } from "discord.js";
 
 const chat: ChatFunction = async ({ message }) => {
   const { post } = useMessage(message);
@@ -35,7 +37,7 @@ const chat: ChatFunction = async ({ message }) => {
           message.content
             .replace(TWITTER_DOMAIN_RAGEX, "twitter.com")
             .replace(/\?.+$/, ""),
-        ].join("\n")
+        ].join("\n"),
       );
       await message.delete();
       return await nsfwPost.react("🔞");
@@ -94,7 +96,7 @@ const chat: ChatFunction = async ({ message }) => {
       // 引用がある
       if (quote) {
         mainTexts.push(
-          `| ${snsUser(quote.author.name, quote.author.screen_name)}`
+          `| ${snsUser(quote.author.name, quote.author.screen_name)}`,
         );
         const lines = quote.text.split(/\n/g);
         for (const i in lines) {
@@ -116,15 +118,39 @@ const chat: ChatFunction = async ({ message }) => {
         mediaPreviewTexts = [...mediaPreviewTexts, "シェア:", ...urls];
       }
 
-      await post([
+      const codeBlockContent = [
+        snsUser(tweet.author.name, tweet.author.screen_name),
+        ...mainTexts,
+        tweetStatus(tweet),
+      ];
+      const textMessage = [
         postedBy(message.author),
-        `${offLink(tweet.url)} ${codeBlock([
-          snsUser(tweet.author.name, tweet.author.screen_name),
-          ...mainTexts,
-          tweetStatus(tweet),
-        ])}`,
+        `${offLink(tweet.url)} ${codeBlock(codeBlockContent)}`,
         ...mediaPreviewTexts,
-      ]);
+      ].join("\n");
+
+      if (textMessage.length <= 2) {
+        await post(textMessage);
+      } else {
+        const buf = text2png(mainTexts.join("\n"), {
+          font: "24px sans-serif",
+          color: "white",
+          bgColor: "#2b2d31",
+          padding: 16,
+          lineSpacing: 8,
+        });
+        await message.channel.send({
+          content: [
+            postedBy(message.author),
+            `${offLink(tweet.url)} ${codeBlock([
+              snsUser(tweet.author.name, tweet.author.screen_name),
+              tweetStatus(tweet),
+            ])}`,
+            ...mediaPreviewTexts,
+          ].join("\n"),
+          files: [new AttachmentBuilder(buf, { name: "tweet.png" })],
+        });
+      }
       await message.delete();
       return;
     }
