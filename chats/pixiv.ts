@@ -5,7 +5,7 @@ import { ChatFunction, FixPixivAPI } from "../types";
 import { useMessage } from "../utils";
 
 const VIEWER =
-  "https://katai5plate.github.io/discord-had2apps-bot/pixiv-viewer?data=";
+  "https://katai5plate.github.io/discord-had2apps-bot/viewer?data=";
 
 const chat: ChatFunction = async ({ message }) => {
   if (PIXIV_REGEX.test(message.content)) {
@@ -34,7 +34,7 @@ const chat: ChatFunction = async ({ message }) => {
       res.image_proxy_urls
         .map((url, i) => link(`頁${i + 1}`, url, true))
         .join(" "),
-      `[画像ビューアー](${
+      `[ビューアー](${
         VIEWER + LZ.compressToEncodedURIComponent(res.image_proxy_urls.join())
       })`,
     ]);
