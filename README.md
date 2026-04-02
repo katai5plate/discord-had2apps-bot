@@ -14,7 +14,7 @@ https://had2apps.com/discord
 {
   "GUILD_ID": "",
   "DISCORD_BOT_TOKEN": "",
-  "PRIVATE_VALUES_LOCATION": "https://discord.com/channels/.../.../..."
+  "PRIVATE_VALUES_LOCATIONS": ["https://discord.com/channels/.../.../..."]
 }
 ```
 
@@ -36,7 +36,7 @@ JSON コードブロックで単発記述。
 #### プラス構文
 
 ```json
-// PRIVATE_VALUES_LOCATION -> PRIVATE_VALUES_LOCATIONS
+// ./env.json
 {
   "PRIVATE_VALUES_LOCATIONS": [
     "https://discord.com/channels/1234567890/.../1",
@@ -44,9 +44,7 @@ JSON コードブロックで単発記述。
     "https://discord.com/channels/1234567890/.../3"
   ]
 }
-```
 
-```json
 // https://discord.com/channels/1234567890/.../1
 {
   "USERS+mods": {
@@ -67,10 +65,8 @@ JSON コードブロックで単発記述。
     "45678": "ジョン"
   }
 }
-```
 
-```json
-// マージ結果
+// 内部マージ結果
 {
   "USERS": {
     "12345": "太郎"
@@ -80,9 +76,15 @@ JSON コードブロックで単発記述。
 }
 ```
 
+### アット構文
+
+USERS で定義したユーザー名をユーザーIDに変換できる。
+
 ```json
-// 使用方法
 {
-  "NO_REPLY_USER_IDS": ["@二郎", "76543"]
+  "NO_REPLY_USER_IDS": ["@二郎", "76543"],
+  "TAIHEKI": {
+    "@ジョン": { ... }
+  }
 }
 ```
