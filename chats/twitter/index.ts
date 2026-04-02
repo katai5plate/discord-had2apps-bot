@@ -113,7 +113,7 @@ const chat: ChatFunction = async ({ message }) => {
       // URLが添付されている
       const urls = textToUrls(mainTexts.join("\n"));
       if (urls.length) {
-        mediaPreviewTexts = ["シェア:", ...urls];
+        mediaPreviewTexts = [...mediaPreviewTexts, "シェア:", ...urls];
       }
 
       await post([
