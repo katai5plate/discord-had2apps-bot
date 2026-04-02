@@ -25,7 +25,7 @@ export const DISCORD_BOT_TOKEN = ENV.DISCORD_BOT_TOKEN ?? "";
 //   gamelore: ENV.MISSKEY_GAMELORE_API_TOKEN ?? "",
 // };
 // export const EXPAND_BOT_USER_ID = ENV.EXPAND_BOT_USER_ID;
-export const PRIVATE_VALUES_LOCATION = ENV.PRIVATE_VALUES_LOCATION;
+export const PRIVATE_VALUES_LOCATIONS = ENV.PRIVATE_VALUES_LOCATIONS ?? [];
 
 export const PLAYING_ON = "はど開発室";
 export const PREFIX = "alexo?";

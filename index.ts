@@ -1,3 +1,4 @@
+import fs from "fs";
 import discord, { GatewayIntentBits, Partials } from "discord.js";
 import express from "express";
 import cc from "./chats/cc";
@@ -14,7 +15,7 @@ import {
   DISCORD_BOT_TOKEN,
   GUILD_ID,
   PLAYING_ON,
-  PRIVATE_VALUES_LOCATION,
+  PRIVATE_VALUES_LOCATIONS,
 } from "./constants";
 // import * as db from "./db";
 import { Connect, PrivateValues } from "./types";
@@ -47,26 +48,81 @@ try {
     });
     // db.init();
 
-    if (PRIVATE_VALUES_LOCATION) {
-      const { message } = await getFromMessageUri(
-        client,
-        PRIVATE_VALUES_LOCATION,
+    if (PRIVATE_VALUES_LOCATIONS.length > 0) {
+      const raws = await Promise.all(
+        PRIVATE_VALUES_LOCATIONS.map(async (loc) => {
+          const { message } = await getFromMessageUri(client, loc);
+          const raw = message.content.match(/```(?:\w+\n)?([\s\S]+?)```/)?.[1];
+          if (!raw) {
+            console.error("設定値が不正", loc, message.content);
+            throw new Error("設定値が不正");
+          }
+          try {
+            return JSON.parse(raw.trim()) as Record<string, unknown>;
+          } catch (e) {
+            console.error(e, loc, message.content);
+            throw new Error("JSONが不正");
+          }
+        }),
       );
-      const raw = message.content.match(/```(?:\w+\n)?([\s\S]+?)```/)?.[1];
-      if (!raw) {
-        console.error("設定値が不正", PRIVATE_VALUES_LOCATION, message.content);
-        throw new Error("設定値が不正");
+
+      fs.writeFileSync(
+        "./private-values-raws.log",
+        JSON.stringify(raws, null, 2),
+      );
+
+      const merged: Record<string, unknown> = {};
+      for (const obj of raws) {
+        for (const [rawKey, value] of Object.entries(obj)) {
+          const key = rawKey.split("+")[0];
+          const existing = merged[key];
+          if (Array.isArray(existing) && Array.isArray(value)) {
+            merged[key] = [...existing, ...value];
+          } else if (
+            existing !== null &&
+            typeof existing === "object" &&
+            !Array.isArray(existing) &&
+            value !== null &&
+            typeof value === "object" &&
+            !Array.isArray(value)
+          ) {
+            merged[key] = { ...existing, ...(value as object) };
+          } else {
+            merged[key] = value;
+          }
+        }
       }
-      try {
-        privateValues = JSON.parse(raw.trim());
-      } catch (e) {
-        console.error(e, PRIVATE_VALUES_LOCATION, message.content);
-        throw new Error("JSONが不正");
-      }
-      console.log({
-        PRIVATE_VALUES_LOCATION,
-        privateValues,
-      });
+
+      const users = merged["USERS"] as Record<string, string> | undefined;
+      const resolveAlias = (v: string): string => {
+        if (!v.startsWith("@")) return v;
+        const alias = v.slice(1);
+        const id = Object.entries(users ?? {}).find(
+          ([, name]) => name === alias,
+        )?.[0];
+        if (!id) console.warn(`USERS に "${alias}" が見つかりません`);
+        return id ?? v;
+      };
+      const resolveAliasesDeep = (value: unknown): unknown => {
+        if (typeof value === "string") return resolveAlias(value);
+        if (Array.isArray(value)) return value.map(resolveAliasesDeep);
+        if (value !== null && typeof value === "object")
+          return Object.fromEntries(
+            Object.entries(value as object).map(([k, v]) => [
+              resolveAlias(k),
+              resolveAliasesDeep(v),
+            ]),
+          );
+        return value;
+      };
+
+      privateValues = Object.fromEntries(
+        Object.entries(merged).map(([k, v]) =>
+          k === "USERS" ? [k, v] : [k, resolveAliasesDeep(v)],
+        ),
+      );
+
+      console.log({ PRIVATE_VALUES_LOCATIONS, privateValues });
     }
   });
 

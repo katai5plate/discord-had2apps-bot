@@ -3,17 +3,18 @@ import discord from "discord.js";
 export interface EnvJSON {
   GUILD_ID: string;
   DISCORD_BOT_TOKEN: string;
-  PRIVATE_VALUES_LOCATION: string;
+  PRIVATE_VALUES_LOCATIONS: string[];
   // MISSKEY_IO_API_TOKEN: string;
   // MISSKEY_GAMELORE_API_TOKEN: string;
 }
 
-export interface PrivateValues {
+export type PrivateValues = Record<string, unknown> & {
+  USERS?: Record<string, string>;
   NO_REPLY_USER_IDS?: string[];
   BOT_USER_ID_TABLE?: {
     EXPAND?: string;
   };
-}
+};
 export interface DatabaseJSON {
   messages: {
     guildId?: string;
