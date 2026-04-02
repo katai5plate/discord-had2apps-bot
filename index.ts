@@ -12,6 +12,7 @@ import random from "./chats/random";
 import twitter from "./chats/twitter";
 import shop from "./chats/shop";
 import cc from "./chats/cc";
+import shuzo from "./chats/shuzo";
 import remove from "./chats/remove";
 import prefix from "./chats/prefix";
 import exception from "./chats/exception";
@@ -62,6 +63,8 @@ try {
       await shop(connect);
       // POSTED BY への返信
       await cc(connect);
+      // 松岡修造
+      await shuzo(connect);
       // 指示者と同じ人限定で bot の発言を消せる機能
       await remove(connect);
       // プレフィックスコマンド
