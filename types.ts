@@ -109,6 +109,49 @@ export interface FixTweetAPITweet {
     provider: string;
   };
   media?: FixTweetAPIMedia;
+  article?: {
+    id: string;
+    title: string;
+    preview_text: string;
+    created_at: string;
+    modified_at: string;
+    cover_media?: {
+      id: string;
+      media_id: string;
+      media_key: string;
+      media_info: {
+        __typename: string;
+        original_img_url: string;
+        original_img_width: number;
+        original_img_height: number;
+        color_info?: {
+          palette: {
+            percentage: number;
+            rgb: { red: number; green: number; blue: number };
+          }[];
+        };
+      };
+    };
+    content: {
+      blocks: {
+        key: string;
+        text: string;
+        type: string;
+        data: Record<string, unknown>;
+        entityRanges: { key: number; length: number; offset: number }[];
+        inlineStyleRanges: unknown[];
+      }[];
+      entityMap: {
+        key: string;
+        value: {
+          type: string;
+          mutability: string;
+          data: Record<string, unknown>;
+        };
+      }[];
+    };
+    media_entities: unknown[];
+  };
 }
 export interface FixTweetAPIUser {
   url: string;

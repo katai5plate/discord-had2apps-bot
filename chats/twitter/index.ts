@@ -78,6 +78,15 @@ const chat: ChatFunction = async ({ message }) => {
       return;
     }
 
+    if (tweetType === TWEET_IS_TWEET && (tweet.article || tweet.quote?.article)) {
+      await post([
+        postedBy(message.author),
+        tweet.url.replace(TWITTER_DOMAIN_RAGEX, "fxtwitter.com"),
+      ]);
+      await message.delete();
+      return;
+    }
+
     if (tweetType === TWEET_IS_TWEET) {
       let mainTexts: string[] = [
         tweet.translation?.provider === "grok"
