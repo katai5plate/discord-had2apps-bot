@@ -30,3 +30,5 @@ JSON コードブロックで単発記述。
   }
 }
 ```
+
+<img width="1049" height="247" alt="image" src="https://github.com/user-attachments/assets/93a0e8c3-278e-4736-ad42-8478ca87b93d" />
