@@ -16,6 +16,7 @@ import shuzo from "./chats/shuzo";
 import remove from "./chats/remove";
 import prefix from "./chats/prefix";
 import exception from "./chats/exception";
+import pixiv from "./chats/pixiv";
 import { Connect } from "./types";
 
 const app = express();
@@ -57,8 +58,11 @@ try {
       if (!NO_REPLY_USERS_ID.includes(message.author.id)) {
         await random(connect);
       }
-      // 全ユーザー向け
+      // 全ユーザー向け ------------
+      // Twitter 展開
       await twitter(connect);
+      // Pixiv 展開
+      await pixiv(connect);
       // アフィリンク
       await shop(connect);
       // POSTED BY への返信

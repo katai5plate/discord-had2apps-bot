@@ -18,7 +18,7 @@ const ENV = {
 export const GUILD_ID = ENV.GUILD_ID ?? "";
 export const DISCORD_BOT_TOKEN = ENV.DISCORD_BOT_TOKEN ?? "";
 export const NO_REPLY_USERS_ID = (ENV.NO_REPLY_USERS_ID_COMMA ?? "").split(
-  /,/g
+  /,/g,
 );
 export const MISSKEY_API_TOKENS = {
   io: ENV.MISSKEY_IO_API_TOKEN ?? "",
@@ -41,12 +41,15 @@ export const TWITTER_DOMAIN_RAGEX = /(twitter|x)\.com/;
 export const TWITTER_REGEX = /^https:\/\/(twitter|x)\.com\/.+$/;
 export const AMAZON_AFFILIATE_REGEX =
   /^https?:\/\/(amzn\.to\/.+|www\.amazon\.(co\.jp|com)\/.+[?&](tag|linkCode|linkId)=.+)$/;
+export const PIXIV_REGEX =
+  /^https:\/\/(www\.|)pixiv\.net(\/[a-z]+|)\/artworks\/(\d+)$/;
 export const POSTED_REGEX = /\[POSTED BY <@(\d+?)>\]/;
 export const URL_REGEX =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 export const MUNEATSU_REGEX = /胸(熱|が熱|が厚|が暑)|宗(篤|厚)/;
 
-export const UHO_REGEX = /^(?=[ウゥホッォオー～・！？。、…\n]*[ウゥホ][ウゥホッォオー～・！？。、…\n]*$)[ウゥホッォオー～・！？。、…\n]+$/;
+export const UHO_REGEX =
+  /^(?=[ウゥホッォオー～・！？。、…\n]*[ウゥホ][ウゥホッォオー～・！？。、…\n]*$)[ウゥホッォオー～・！？。、…\n]+$/;
 const UHO_BASIC = [
   "ウホ",
   "ウホホ",

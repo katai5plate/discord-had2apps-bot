@@ -244,3 +244,21 @@ export interface MisskeyAPINoteShow {
   poll?: MisskeyAPINoteShowPoll;
   renote?: MisskeyAPINoteShow;
 }
+
+export interface FixPixivAPI {
+  image_proxy_urls: string[];
+  title: string;
+  ai_generated: boolean;
+  description: string;
+  tags: `#${string}`[];
+  url: string;
+  author_name: string;
+  author_id: string;
+  profile_image_url: string;
+  language: string;
+  bookmark_count: number;
+  like_count: number;
+  comment_count: number;
+  view_count: number;
+  x_restrict: number;
+}
