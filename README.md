@@ -81,10 +81,19 @@ JSON コードブロックで単発記述。
 USERS で定義したユーザー名をユーザーIDに変換できる。
 
 ```json
+// before
 {
   "NO_REPLY_USER_IDS": ["@二郎", "76543"],
   "TAIHEKI": {
     "@ジョン": { ... }
+  }
+}
+
+// after
+{
+  "NO_REPLY_USER_IDS": ["67890", "76543"],
+  "TAIHEKI": {
+    "45678": { ... }
   }
 }
 ```
