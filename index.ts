@@ -10,6 +10,7 @@ import {
 import maou from "./chats/maou";
 import random from "./chats/random";
 import twitter from "./chats/twitter";
+import shop from "./chats/shop";
 import remove from "./chats/remove";
 import prefix from "./chats/prefix";
 import exception from "./chats/exception";
@@ -56,6 +57,8 @@ try {
       }
       // 全ユーザー向け
       await twitter(connect);
+      // アフィリンク
+      await shop(connect);
       // 指示者と同じ人限定で bot の発言を消せる機能
       await remove(connect);
       // プレフィックスコマンド
@@ -77,7 +80,7 @@ try {
           size: message.content.length,
         },
       ],
-      []
+      [],
     );
   });
 

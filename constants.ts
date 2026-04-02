@@ -39,6 +39,8 @@ export const DELETE_REGEX =
   /^(削除|(消|け)して|やっぱ?なし|やめて?|なしで?|delete|kesite|yame)$/;
 export const TWITTER_DOMAIN_RAGEX = /(twitter|x)\.com/;
 export const TWITTER_REGEX = /^https:\/\/(twitter|x)\.com\/.+$/;
+export const AMAZON_AFFILIATE_REGEX =
+  /^https?:\/\/(amzn\.to\/.+|www\.amazon\.(co\.jp|com)\/.+[?&](tag|linkCode|linkId)=.+)$/;
 export const POSTED_REGEX = /\[POSTED BY <@(\d+?)>\]/;
 export const URL_REGEX =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
