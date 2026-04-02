@@ -129,7 +129,7 @@ const chat: ChatFunction = async ({ message }) => {
         ...mediaPreviewTexts,
       ].join("\n");
 
-      if (textMessage.length <= 2) {
+      if (textMessage.length <= 2000) {
         await post(textMessage);
       } else {
         const buf = text2png(mainTexts.join("\n"), {
