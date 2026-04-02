@@ -1,8 +1,11 @@
-import { compressToEncodedURIComponent } from "lz-string";
+import LZ from "lz-string";
 import { PIXIV_REGEX } from "../constants";
 import { codeBlock, link, pixivStatus, postedBy, snsUser } from "../snippet";
 import { ChatFunction, FixPixivAPI } from "../types";
 import { useMessage } from "../utils";
+
+const VIEWER =
+  "https://katai5plate.github.io/discord-had2apps-bot/pixiv-viewer?data=";
 
 const chat: ChatFunction = async ({ message }) => {
   if (PIXIV_REGEX.test(message.content)) {
@@ -31,9 +34,9 @@ const chat: ChatFunction = async ({ message }) => {
       res.image_proxy_urls
         .map((url, i) => link(`頁${i + 1}`, url, true))
         .join(" "),
-      `[ビューアー](https://katai5plate.github.io/discord-had2apps-bot/pixiv-viewer?data=${compressToEncodedURIComponent(
-        res.image_proxy_urls.join(),
-      )})`,
+      `[画像ビューアー](${
+        VIEWER + LZ.compressToEncodedURIComponent(res.image_proxy_urls.join())
+      })`,
     ]);
     await message.delete();
   }
