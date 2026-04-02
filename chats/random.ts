@@ -24,7 +24,7 @@ const chat: ChatFunction = async ({ message }) => {
         "そうだ！（ひらめき）",
         "そう・・・かなぁ？（疑問）",
         "違うなぁ（否定）",
-      ])
+      ]),
     );
   }
 
@@ -38,7 +38,7 @@ const chat: ChatFunction = async ({ message }) => {
         "話きこか？",
         "なんかあった？",
         "ほう？",
-      ])
+      ]),
     );
   }
 
@@ -67,20 +67,44 @@ const chat: ChatFunction = async ({ message }) => {
       "やろう！",
       "やれ！",
       "お前ならできる！",
-    ])
+    ]),
+  );
+
+  // 下の句（意味深）
+  ["うほっ", "ウホッ"].forEach((mes) =>
+    instantPost(mes, [
+      "いい男・・・",
+      "やらないか",
+      "アッー！",
+      "あぁ＾～",
+      `いい<@${message.author.id}>・・・`,
+    ]),
   );
 
   // ゴリラ語
-  if (message.content === "ウホッ") {
-    await reply(`いい<@${message.author.id}>・・・`);
-  } else if (UHO_REGEX.test(message.content)) {
+  if (
+    UHO_REGEX.test(message.content) &&
+    !["うほっ", "ウホッ"].includes(message.content)
+  ) {
     await reply(
       Array.from(
         { length: (Math.random() * 10) | 0 },
-        () => UHO_PALLETE[Math.floor(Math.random() * UHO_PALLETE.length)]
-      ).join("") || NO_COMMENT
+        () => UHO_PALLETE[Math.floor(Math.random() * UHO_PALLETE.length)],
+      ).join("") || NO_COMMENT,
     );
   }
+
+  // 下の句２（迫真）
+  ["すごく", "すごく・・・", "すごく…", "凄く", "凄く・・・", "凄く…"].forEach(
+    (mes) => instantPost(mes, ["大きいです・・・"]),
+  );
+  ["ああ＾～", "あぁ＾～", "あ＾～", "ああ～", "あぁ～"].forEach((mes) =>
+    instantPost(mes, [
+      "いいっすね～",
+      "たまらねえぜ",
+      "心がぴょんぴょんするんじゃぁ＾～",
+    ]),
+  );
 
   // イルカ語
   if (IRUKA_REGEX.test(message.content))
@@ -89,7 +113,7 @@ const chat: ChatFunction = async ({ message }) => {
         "🐬 ＜ ・・・。",
         "🐬 ＜ お、やんのか？",
         "🐬 ＜ 俺がお前を消してやってもいいんだぜ",
-      ])
+      ]),
     );
 
   // 胸が熱くなる

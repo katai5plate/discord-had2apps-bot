@@ -44,7 +44,7 @@ export const URL_REGEX =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 export const MUNEATSU_REGEX = /胸(熱|が熱|が厚|が暑)|宗(篤|厚)/;
 
-export const UHO_REGEX = /^[ウゥホッォオー～・！？。、…\n]+$/;
+export const UHO_REGEX = /^(?=[ウゥホッォオー～・！？。、…\n]*[ウゥホ][ウゥホッォオー～・！？。、…\n]*$)[ウゥホッォオー～・！？。、…\n]+$/;
 const UHO_BASIC = [
   "ウホ",
   "ウホホ",
