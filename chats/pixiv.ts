@@ -12,8 +12,7 @@ const chat: ChatFunction = async ({ message }) => {
       await fetch(`https://www.phixiv.net/api/info?id=${id}`)
     ).json()) as FixPixivAPI;
     const isSafe =
-      res.x_restrict === 1 ? (message.channel as { nsfw: boolean }).nsfw : true;
-    console.log(res.x_restrict, (message.channel as { nsfw: boolean }).nsfw);
+      res.x_restrict > 0 ? (message.channel as { nsfw: boolean }).nsfw : true;
     await post([
       postedBy(message.author),
       `<${res.url}>`,
@@ -24,7 +23,9 @@ const chat: ChatFunction = async ({ message }) => {
         pixivStatus(res),
       ]),
       isSafe
-        ? res.image_proxy_urls[0]
+        ? res.x_restrict === 2
+          ? "※グロ注意なのでリンクから見てください"
+          : res.image_proxy_urls[0]
         : "※えっちなので画像はリンクから見てください",
       "画像 " +
         res.image_proxy_urls
