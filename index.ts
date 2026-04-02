@@ -11,6 +11,7 @@ import maou from "./chats/maou";
 import random from "./chats/random";
 import twitter from "./chats/twitter";
 import shop from "./chats/shop";
+import cc from "./chats/cc";
 import remove from "./chats/remove";
 import prefix from "./chats/prefix";
 import exception from "./chats/exception";
@@ -59,6 +60,8 @@ try {
       await twitter(connect);
       // アフィリンク
       await shop(connect);
+      // POSTED BY への返信
+      await cc(connect);
       // 指示者と同じ人限定で bot の発言を消せる機能
       await remove(connect);
       // プレフィックスコマンド
