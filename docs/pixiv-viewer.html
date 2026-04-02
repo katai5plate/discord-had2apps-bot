@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
+  <title>HBPV</title>
+</head>
+
+<body>
+  <img style="width: 100%; height: auto; display: none;" />
+  <video style="width: 100%; height: auto; display: none;" loop autoplay playsinline muted>
+    <source type="video/mp4" />
+  </video>
+  <pre style="width: 100%; height: auto; display: none;"></pre>
+  <script>
+    (() => {
+      const $ = {
+        img: document.querySelector("img"),
+        video: document.querySelector("video"),
+        source: document.querySelector("source"),
+        pre: document.querySelector("pre")
+      }
+      $.video.setAttribute("controls", "");
+      window._ = $;
+      const q = location.search.slice(1).split("&").reduce((p, c) => {
+        const [k, v] = c.split("=");
+        return { ...p, [k]: v }
+      }, {})
+      const data = LZString.decompressFromEncodedURIComponent(q.data)
+      if (!data) {
+        $.pre.style.display = "block";
+        $.pre.textContent = "データエラー"
+        return;
+      }
+      const list = data.split(",")
+      let index = -1;
+      const onclick = () => {
+        if (index === list.length - 1) index = -1;
+        console.log(list[++index])
+        $.img.style.display = "none";
+        $.video.style.display = "none";
+        $.pre.style.display = "none";
+        if (list[index].match("/img-master/")) {
+          $.img.style.display = "block";
+          $.img.src = list[index];
+        }
+        if (list[index].match("/ugoira/")) {
+          $.video.style.display = "block";
+          $.source.src = list[index];
+          $.video.load();
+        }
+      }
+      $.img.onclick = () => onclick()
+      $.video.onclick = () => onclick()
+      $.pre.onclick = () => onclick()
+      onclick();
+    })()
+  </script>
+</body>
+
+</html>

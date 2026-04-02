@@ -1,3 +1,4 @@
+import { compressToEncodedURIComponent } from "lz-string";
 import { PIXIV_REGEX } from "../constants";
 import { codeBlock, link, pixivStatus, postedBy, snsUser } from "../snippet";
 import { ChatFunction, FixPixivAPI } from "../types";
@@ -30,6 +31,9 @@ const chat: ChatFunction = async ({ message }) => {
       res.image_proxy_urls
         .map((url, i) => link(`頁${i + 1}`, url, true))
         .join(" "),
+      `[ビューアー](https://katai5plate.github.io/discord-had2apps-bot/pixiv-viewer?data=${compressToEncodedURIComponent(
+        res.image_proxy_urls.join(),
+      )})`,
     ]);
     await message.delete();
   }
