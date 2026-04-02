@@ -17,14 +17,15 @@ const ENV = {
 };
 export const GUILD_ID = ENV.GUILD_ID ?? "";
 export const DISCORD_BOT_TOKEN = ENV.DISCORD_BOT_TOKEN ?? "";
-export const NO_REPLY_USERS_ID = (ENV.NO_REPLY_USERS_ID_COMMA ?? "").split(
-  /,/g,
-);
-export const MISSKEY_API_TOKENS = {
-  io: ENV.MISSKEY_IO_API_TOKEN ?? "",
-  gamelore: ENV.MISSKEY_GAMELORE_API_TOKEN ?? "",
-};
-export const EXPAND_BOT_USER_ID = ENV.EXPAND_BOT_USER_ID;
+// export const NO_REPLY_USERS_ID = (ENV.NO_REPLY_USERS_ID_COMMA ?? "").split(
+//   /,/g,
+// );
+// export const MISSKEY_API_TOKENS = {
+//   io: ENV.MISSKEY_IO_API_TOKEN ?? "",
+//   gamelore: ENV.MISSKEY_GAMELORE_API_TOKEN ?? "",
+// };
+// export const EXPAND_BOT_USER_ID = ENV.EXPAND_BOT_USER_ID;
+export const PRIVATE_VALUES_LOCATION = ENV.PRIVATE_VALUES_LOCATION;
 
 export const PLAYING_ON = "はど開発室";
 export const PREFIX = "alexo?";

@@ -3,13 +3,17 @@ import discord from "discord.js";
 export interface EnvJSON {
   GUILD_ID: string;
   DISCORD_BOT_TOKEN: string;
-  NO_REPLY_USERS_ID_COMMA: string;
-  // IGNORE_ANALYZE_CHANNEL_ID_COMMA: string;
-  MISSKEY_IO_API_TOKEN: string;
-  MISSKEY_GAMELORE_API_TOKEN: string;
-  EXPAND_BOT_USER_ID: string;
+  PRIVATE_VALUES_LOCATION: string;
+  // MISSKEY_IO_API_TOKEN: string;
+  // MISSKEY_GAMELORE_API_TOKEN: string;
 }
 
+export interface PrivateValues {
+  NO_REPLY_USER_IDS?: string[];
+  BOT_USER_ID_TABLE?: {
+    EXPAND?: string;
+  };
+}
 export interface DatabaseJSON {
   messages: {
     guildId?: string;
@@ -27,7 +31,10 @@ export interface Connect {
   guild: discord.Guild;
   error?: Error | TypeError;
 }
-export type ChatFunction = (connect: Connect) => Promise<any>;
+export type ChatFunction = (
+  connect: Connect,
+  privateValues: PrivateValues,
+) => Promise<any>;
 
 interface FixTweetAPIYouTube {
   type: "video";

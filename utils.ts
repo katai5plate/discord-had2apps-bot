@@ -9,6 +9,7 @@ import {
   URL_REGEX,
 } from "./constants";
 import { FixTweetAPI, Message } from "./types";
+import { Client, TextChannel } from "discord.js";
 
 export const shuffleWord = (arr: string[]) => {
   let cumulativeWeight = 0;
@@ -81,3 +82,16 @@ export const textToUrls = (text: string): string[] =>
 
 export const exportLog = (name: string, obj: object) =>
   fs.writeFileSync(`${name}.log`, JSON.stringify(obj, null, 2));
+
+export const getUser = async (client: Client, id: string) =>
+  client.users.fetch(id);
+export const getChannel = async (client: Client, id: string) =>
+  client.channels.fetch(id);
+export const getFromMessageUri = async (client: Client, uri: string) => {
+  const [_, _g, c, m] = uri.match(/\/channels\/(\d+)\/(\d+)\/(\d+)/) ?? [];
+  const channel = await client.channels.fetch(c);
+  if (channel instanceof TextChannel) {
+    return { channel, message: await channel.messages.fetch(m) };
+  }
+  throw new Error("URLが不正");
+};
