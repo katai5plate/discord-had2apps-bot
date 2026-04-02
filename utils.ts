@@ -1,4 +1,3 @@
-import axios from "axios";
 import fs from "fs";
 import {
   NO_COMMENT,
@@ -47,13 +46,13 @@ export const useTweet = async (
   const res: FixTweetAPI | typeof TWEET_IS_ERROR | typeof TWEET_IS_NSFW =
     await (async () => {
       try {
-        return await axios
-          .get(url.replace(TWITTER_DOMAIN_RAGEX, "api.fxtwitter.com") + "/jp")
-          .then(({ data }) => data);
-      } catch (error) {
-        // なぜかこれでないと取れない
-        const status = JSON.parse(JSON.stringify(error)).status;
-        if (status === 500) return TWEET_IS_NSFW;
+        const res = await fetch(
+          url.replace(TWITTER_DOMAIN_RAGEX, "api.fxtwitter.com") + "/jp",
+        );
+        if (res.status === 500) return TWEET_IS_NSFW;
+        if (!res.ok) return TWEET_IS_ERROR;
+        return await res.json();
+      } catch {
         return TWEET_IS_ERROR;
       }
     })();
