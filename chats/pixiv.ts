@@ -27,10 +27,9 @@ const chat: ChatFunction = async ({ message }) => {
           ? "※グロ注意なのでリンクから見てください"
           : res.image_proxy_urls[0]
         : "※えっちなので画像はリンクから見てください",
-      "画像 " +
-        res.image_proxy_urls
-          .map((url, i) => link(`${i + 1}`, url, true))
-          .join(" "),
+      res.image_proxy_urls
+        .map((url, i) => link(`頁${i + 1}`, url, true))
+        .join(" "),
     ]);
     await message.delete();
   }
