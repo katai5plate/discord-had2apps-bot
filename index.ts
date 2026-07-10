@@ -28,6 +28,7 @@ const client = new discord.Client({
 });
 
 let privateValues: PrivateValues = {};
+const HAS_SNAPSHOT_MESSAGE_FLAG = 1 << 14;
 
 try {
   if (DISCORD_BOT_TOKEN == undefined) {
@@ -127,7 +128,14 @@ try {
   });
 
   client.on("messageCreate", async (message) => {
-    if (message.author.id === client.user?.id || message.author.bot || message.system) return;
+    if (
+      message.author.id === client.user?.id ||
+      message.author.bot ||
+      message.system
+    )
+      return;
+    // 転送時挙動
+    if ((message.flags.bitfield & HAS_SNAPSHOT_MESSAGE_FLAG) !== 0) return;
 
     const connect: Connect = {
       message,
