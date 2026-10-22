@@ -20,7 +20,7 @@ import {
 } from "../../snippet";
 import { pollTexts } from "./pollTexts";
 import { mediaTexts } from "./mediaTexts";
-import text2png from "text2png";
+import { textToPng } from "./textToPng";
 import { AttachmentBuilder } from "discord.js";
 
 const chat: ChatFunction = async ({ message }) => {
@@ -141,13 +141,7 @@ const chat: ChatFunction = async ({ message }) => {
       if (textMessage.length <= 2000) {
         await post(textMessage);
       } else {
-        const buf = text2png(mainTexts.join("\n"), {
-          font: "24px sans-serif",
-          color: "white",
-          bgColor: "#2b2d31",
-          padding: 16,
-          lineSpacing: 8,
-        });
+        const buf = textToPng(mainTexts.join("\n"));
         await message.channel.send({
           content: [
             postedBy(message.author),

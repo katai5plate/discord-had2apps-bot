@@ -9,7 +9,6 @@ import {
 } from "../constants";
 import { ChatFunction } from "../types";
 import { shuffleWord, useMessage } from "../utils";
-import text2png from "text2png";
 import { AttachmentBuilder } from "discord.js";
 
 const chat: ChatFunction = async ({ message }) => {
