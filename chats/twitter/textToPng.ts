@@ -1,6 +1,16 @@
-import { createCanvas } from "@napi-rs/canvas";
+import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
+import { fileURLToPath } from "node:url";
 
-const FONT = "24px sans-serif";
+const FONT_FAMILY = "Discord Bot Noto Sans JP";
+const fontPath = fileURLToPath(
+  new URL("../../assets/fonts/NotoSansJP.ttf", import.meta.url),
+);
+
+if (!GlobalFonts.registerFromPath(fontPath, FONT_FAMILY)) {
+  throw new Error(`Failed to load the bundled font: ${fontPath}`);
+}
+
+const FONT = `24px "${FONT_FAMILY}"`;
 const PADDING = 16;
 const LINE_HEIGHT = 24;
 const LINE_SPACING = 8;
